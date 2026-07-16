@@ -247,56 +247,134 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* ── Skill card ── */
-    .skill-card {
-      background: var(--code-bg);
+    /* ── Skill explanation card ── */
+    .skill-explain {
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
-      border: 1px solid #1e293b;
     }
 
-    .skill-card-header {
-      padding: 12px 20px;
-      border-bottom: 1px solid #1e293b;
+    .skill-explain-header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      padding: 24px 28px;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
+      gap: 20px;
     }
 
-    .skill-card-header .filename {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: #64748b;
-    }
+    .skill-explain-header .left { flex: 1; }
 
-    .skill-card-header .badge {
+    .skill-eyebrow {
       font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
+      font-weight: 700;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      padding: 2px 8px;
-      border-radius: 4px;
-      background: #1e293b;
       color: var(--accent);
+      margin-bottom: 6px;
     }
 
-    .skill-card pre {
-      padding: 20px;
-      font-family: 'JetBrains Mono', monospace;
+    .skill-explain-header h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 6px;
+    }
+
+    .skill-explain-header p {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+
+    .skill-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(99,102,241,0.15);
+      border: 1px solid rgba(99,102,241,0.4);
+      color: #a5b4fc;
+      padding: 9px 16px;
+      border-radius: 8px;
       font-size: 12px;
-      line-height: 1.7;
-      color: var(--code-text);
-      white-space: pre-wrap;
-      word-break: break-word;
-      overflow-x: auto;
-      max-height: 480px;
-      overflow-y: auto;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: all 0.15s;
+      cursor: pointer;
     }
 
-    .skill-card pre .comment { color: #475569; }
-    .skill-card pre .heading { color: #a78bfa; font-weight: 600; }
-    .skill-card pre .key { color: #6ee7b7; }
-    .skill-card pre .val { color: #fbbf24; }
+    .skill-download:hover {
+      background: rgba(99,102,241,0.25);
+      color: #c7d2fe;
+    }
+
+    .skill-download svg { width: 14px; height: 14px; }
+
+    .skill-explain-body {
+      padding: 24px 28px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .skill-block-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 12px;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .skill-tag {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text-2);
+    }
+
+    .skill-io {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .skill-io-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .skill-io-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .label-in { background: #ecfdf5; color: #065f46; }
+    .label-out { background: var(--accent-light); color: #3730a3; }
+    .label-rule { background: #fef3c7; color: #92400e; }
+
+    .skill-io-text { color: var(--text-2); line-height: 1.5; }
 
     /* ── Output card ── */
     .output-card {
@@ -823,50 +901,54 @@
     </div>
 
     <div class="tabs" id="tabs-01">
-      <button class="tab active" onclick="switchTab('01','skill')">Skill Prompt</button>
+      <button class="tab active" onclick="switchTab('01','skill')">How it was built</button>
       <button class="tab" onclick="switchTab('01','output')">Output</button>
     </div>
 
     <!-- Skill -->
     <div class="tab-content active" id="01-skill">
-      <div class="skill-card">
-        <div class="skill-card-header">
-          <span class="filename">skills/01-segmentation.md</span>
-          <span class="badge">Prompt</span>
+      <div class="skill-explain">
+        <div class="skill-explain-header">
+          <div class="left">
+            <div class="skill-eyebrow">Skill 01 · 01-segmentation.md</div>
+            <h3>How do you slice 300 accounts so a machine can act on each one?</h3>
+            <p>This skill instructs an LLM to build a segmentation model grounded in real data signals — not personas. Every segment must map to a concrete action: if it can't trigger something, it doesn't belong.</p>
+          </div>
+          <a class="skill-download" href="skills/01-segmentation.md" download="01-segmentation.md">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v9M4 8l4 4 4-4"/><path d="M2 13h12"/></svg>
+            Download skill
+          </a>
         </div>
-        <pre>## Role
-You are a senior lifecycle marketing strategist designing an account
-segmentation model for StorySnap — a B2B video marketing holding
-company. Your output powers automated journeys and Strategist alerts.
-Every segment must be actionable. If it can't trigger something,
-it doesn't belong.
-
-## Context
-- Credit bundles (~$15–20K), 12-month terms
-- ~300 active accounts, 3–5 contacts each
-- 85% SaaS / cybersecurity, predominantly North America
-- Data: Airtable (credits, deliverables), HubSpot (contacts,
-  engagement), portal (logins), champion departure alerts
-- Two brands: Testimonial Hero + Product Hype. Credits interchangeable.
-  A third agency is launching — model must be brand-agnostic.
-
-## Known failure modes to encode
-- behind_pace: credits used << predicted by elapsed term
-- single_service: only one deliverable type, no cross-brand history
-- testimonial_blocked: has testimonial credits, none delivered in 60d+
-- lost_champion: primary contact departed, replacement not engaged
-- dark: no portal login + low email engagement in 30 days
-
-## Your task
-1. Pace Score definition — formula computable from Airtable only
-2. Segment definitions — max 6, mutually exclusive, each maps to action
-3. Flag system — 5 failure mode flags, detection logic, stackable
-4. Priority matrix — segment + flag count → escalation level
-
-## Quality criteria
-- Simpler beats comprehensive
-- No invented signals — all derivable from listed data sources
-- Must scale when a third/fourth brand is added</pre>
+        <div class="skill-explain-body">
+          <div>
+            <div class="skill-block-title">Approach & methods</div>
+            <div class="skill-tags">
+              <span class="skill-tag">Pace Score formula</span>
+              <span class="skill-tag">Failure mode encoding</span>
+              <span class="skill-tag">Mutually exclusive segments</span>
+              <span class="skill-tag">Stackable flag system</span>
+              <span class="skill-tag">Priority escalation matrix</span>
+              <span class="skill-tag">Brand-agnostic design</span>
+            </div>
+          </div>
+          <div>
+            <div class="skill-block-title">Inputs → Outputs</div>
+            <div class="skill-io">
+              <div class="skill-io-row">
+                <span class="skill-io-label label-in">IN</span>
+                <span class="skill-io-text">Airtable data (credits, deliverables, purchase date), HubSpot engagement, portal logins, departure alerts</span>
+              </div>
+              <div class="skill-io-row">
+                <span class="skill-io-label label-out">OUT</span>
+                <span class="skill-io-text">Pace Score definition · 6 segments with signals · 5 stackable failure mode flags · Priority matrix (segment × flags → escalation level)</span>
+              </div>
+              <div class="skill-io-row">
+                <span class="skill-io-label label-rule">RULE</span>
+                <span class="skill-io-text">No invented signals. Every input must be derivable from existing data sources today.</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1046,42 +1128,53 @@ it doesn't belong.
     </div>
 
     <div class="tabs" id="tabs-02">
-      <button class="tab active" onclick="switchTab('02','skill')">Skill Prompt</button>
+      <button class="tab active" onclick="switchTab('02','skill')">How it was built</button>
       <button class="tab" onclick="switchTab('02','output')">Output</button>
     </div>
 
     <div class="tab-content active" id="02-skill">
-      <div class="skill-card">
-        <div class="skill-card-header">
-          <span class="filename">skills/02-journey-system.md</span>
-          <span class="badge">Prompt</span>
+      <div class="skill-explain">
+        <div class="skill-explain-header">
+          <div class="left">
+            <div class="skill-eyebrow">Skill 02 · 02-journey-system.md</div>
+            <h3>Where does the machine act on its own — and where does it hand off to a human?</h3>
+            <p>This skill maps every journey from entry trigger to exit condition, forcing a deliberate machine/human split at each step. The constraint: no journey exceeds 5–6 steps before requiring a human decision.</p>
+          </div>
+          <a class="skill-download" href="skills/02-journey-system.md" download="02-journey-system.md">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v9M4 8l4 4 4-4"/><path d="M2 13h12"/></svg>
+            Download skill
+          </a>
         </div>
-        <pre>## Role
-You are designing the automated journey system for StorySnap.
-You are mapping triggers, branches, channel decisions, and timing
-for each key segment. You build the engine. Strategists drive the car.
-
-## Key context
-- Best clients repurchase around month 6–7, not at expiration.
-  Replicate that behavior at scale.
-- Clients who fall behind drift further. Early intervention beats rescue.
-- Specific nudges outperform generic sends.
-- Channels: automated email (HubSpot), in-app/portal message,
-  Strategist task (HubSpot)
-
-## For each segment journey:
-1. Entry trigger — exact signal that enrolls the account
-2. Journey steps — timing, channel, message intent, branch conditions
-3. Machine / Human split — where automation stops and why
-4. Exit conditions — what removes an account from the journey
-
-## Design principles
-- Automate what scales. Hand off what requires judgment or relationship.
-- Never automate a message that could embarrass a Strategist if
-  the client replies about it.
-- The Strategist alert is a product, not an afterthought.
-- No journey exceeds 5–6 steps before requiring a human decision.
-- B2B = no urgency pressure tactics. Tone stays consultative.</pre>
+        <div class="skill-explain-body">
+          <div>
+            <div class="skill-block-title">Approach & methods</div>
+            <div class="skill-tags">
+              <span class="skill-tag">Trigger-based enrollment</span>
+              <span class="skill-tag">Branch logic per step</span>
+              <span class="skill-tag">Channel selection rationale</span>
+              <span class="skill-tag">Machine / Human split</span>
+              <span class="skill-tag">Exit condition design</span>
+              <span class="skill-tag">B2B tone guardrails</span>
+            </div>
+          </div>
+          <div>
+            <div class="skill-block-title">Inputs → Outputs</div>
+            <div class="skill-io">
+              <div class="skill-io-row">
+                <span class="skill-io-label label-in">IN</span>
+                <span class="skill-io-text">Segments and flags from Skill 01 · Available channels (email, in-app, Strategist task) · Known behavioral patterns (early repurchase, drift compounding)</span>
+              </div>
+              <div class="skill-io-row">
+                <span class="skill-io-label label-out">OUT</span>
+                <span class="skill-io-text">5 journey maps (New, Drifting, At Risk, Expiration Watch, Lost Champion) each with trigger, steps, split rationale, and exit conditions</span>
+              </div>
+              <div class="skill-io-row">
+                <span class="skill-io-label label-rule">RULE</span>
+                <span class="skill-io-text">Never automate a message that could embarrass a Strategist if the client replies about it directly.</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1223,39 +1316,53 @@ for each key segment. You build the engine. Strategists drive the car.
     </div>
 
     <div class="tabs" id="tabs-03">
-      <button class="tab active" onclick="switchTab('03','skill')">Skill Prompt</button>
+      <button class="tab active" onclick="switchTab('03','skill')">How it was built</button>
       <button class="tab" onclick="switchTab('03','output')">Output</button>
     </div>
 
     <div class="tab-content active" id="03-skill">
-      <div class="skill-card">
-        <div class="skill-card-header">
-          <span class="filename">skills/03-strategist-layer.md</span>
-          <span class="badge">Prompt</span>
+      <div class="skill-explain">
+        <div class="skill-explain-header">
+          <div class="left">
+            <div class="skill-eyebrow">Skill 03 · 03-strategist-layer.md</div>
+            <h3>How do you design alerts that Strategists actually act on — and don't learn to ignore?</h3>
+            <p>This skill treats the Strategist alert as a product in itself. It forces prioritization of alert types, complete context in every alert body, and talking points that make outreach possible within minutes of receiving the notification.</p>
+          </div>
+          <a class="skill-download" href="skills/03-strategist-layer.md" download="03-strategist-layer.md">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v9M4 8l4 4 4-4"/><path d="M2 13h12"/></svg>
+            Download skill
+          </a>
         </div>
-        <pre>## Role
-You are designing the Strategist-facing layer of StorySnap's
-lifecycle system. Account Strategists are the real users of
-what you build. Design what they receive, when, and in what
-form — so they can act immediately without extra research.
-
-## The Strategist layer must solve:
-- Alert fatigue: if everything is urgent, nothing is
-- Context on delivery: why they're being alerted, not just what
-- Readiness to act: open the account and act within minutes
-- Champion handoff: who left, who replaced, account status at
-  that exact moment
-
-## Your task
-1. Alert taxonomy — types, priority levels, triggers, channels
-2. One fully designed alert — highest-impact, all fields specified
-3. One talking points template — for the same trigger
-
-## Design principles
-- Fewer alerts, not more. Ruthlessly prioritize.
-- Every alert must answer: what happened, why it matters, next action.
-- Talking points are account management ammunition, not marketing copy.
-- The champion departure alert is the most important one to get right.</pre>
+        <div class="skill-explain-body">
+          <div>
+            <div class="skill-block-title">Approach & methods</div>
+            <div class="skill-tags">
+              <span class="skill-tag">Alert taxonomy design</span>
+              <span class="skill-tag">Priority tiering (Urgent / Alert / Watch)</span>
+              <span class="skill-tag">Full-context alert template</span>
+              <span class="skill-tag">HubSpot-native implementation</span>
+              <span class="skill-tag">Talking points framework</span>
+              <span class="skill-tag">Champion handoff playbook</span>
+            </div>
+          </div>
+          <div>
+            <div class="skill-block-title">Inputs → Outputs</div>
+            <div class="skill-io">
+              <div class="skill-io-row">
+                <span class="skill-io-label label-in">IN</span>
+                <span class="skill-io-text">Journey handoff points from Skill 02 · HubSpot as the Strategist's primary tool · 125–150 accounts per Strategist</span>
+              </div>
+              <div class="skill-io-row">
+                <span class="skill-io-label label-out">OUT</span>
+                <span class="skill-io-text">6-type alert taxonomy with priorities · Fully designed Lost Champion alert (all dynamic fields) · Outreach talking points for new champion contact</span>
+              </div>
+              <div class="skill-io-row">
+                <span class="skill-io-label label-rule">RULE</span>
+                <span class="skill-io-text">Every alert must answer three questions: what happened, why it matters, what to do next. If it doesn't, it's noise.</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1395,45 +1502,53 @@ If expiration &lt; 90 days, flag for commercial conversation on first call.
     </div>
 
     <div class="tabs" id="tabs-04">
-      <button class="tab active" onclick="switchTab('04','skill')">Skill Prompt</button>
+      <button class="tab active" onclick="switchTab('04','skill')">How it was built</button>
       <button class="tab" onclick="switchTab('04','output')">Output</button>
     </div>
 
     <div class="tab-content active" id="04-skill">
-      <div class="skill-card">
-        <div class="skill-card-header">
-          <span class="filename">skills/04-copy.md</span>
-          <span class="badge">Prompt</span>
+      <div class="skill-explain">
+        <div class="skill-explain-header">
+          <div class="left">
+            <div class="skill-eyebrow">Skill 04 · 04-copy.md</div>
+            <h3>How do you write automated messages that a real person can't tell were automated?</h3>
+            <p>This skill constrains the LLM to write copy that references real account data, uses one clear CTA, and never sounds like a marketing platform fired it. Tone rules are non-negotiable guardrails, not suggestions.</p>
+          </div>
+          <a class="skill-download" href="skills/04-copy.md" download="04-copy.md">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v9M4 8l4 4 4-4"/><path d="M2 13h12"/></svg>
+            Download skill
+          </a>
         </div>
-        <pre>## Role
-You are a senior lifecycle marketing copywriter writing automated
-messages for StorySnap. Your copy must sound like a smart human
-wrote it for this specific account. Punchy, non-salesy, specific.
-
-## Voice and tone rules
-- Direct, warm, specific
-- No corporate language ("leverage", "maximize", "unlock")
-- No false urgency ("Act now!", "Don't miss out!")
-- References real account data when possible
-- Short paragraphs. One idea per sentence.
-- Subject lines under 8 words
-
-## Your task
-Write two messages from the journey system:
-
-1. One automated email — highest-impact trigger moment.
-   Specify trigger, segment, subject + body (max 150 words),
-   dynamic variable placeholders.
-
-2. One in-app / portal message — contextual nudge (max 60 words).
-   Feel native to the product, not like a pop-up ad.
-
-## Quality criteria
-- A real person should not be able to tell it was automated
-- Every dynamic variable must be pullable from Airtable or HubSpot
-- Email: single clear CTA
-- In-app: completable in one glance
-- Neither message should mention credits expiring like a threat</pre>
+        <div class="skill-explain-body">
+          <div>
+            <div class="skill-block-title">Approach & methods</div>
+            <div class="skill-tags">
+              <span class="skill-tag">Voice & tone constraints</span>
+              <span class="skill-tag">Dynamic variable mapping</span>
+              <span class="skill-tag">Trigger-specific copy</span>
+              <span class="skill-tag">Single CTA enforcement</span>
+              <span class="skill-tag">Word count limits</span>
+              <span class="skill-tag">Anti-patterns list</span>
+            </div>
+          </div>
+          <div>
+            <div class="skill-block-title">Inputs → Outputs</div>
+            <div class="skill-io">
+              <div class="skill-io-row">
+                <span class="skill-io-label label-in">IN</span>
+                <span class="skill-io-text">Highest-impact trigger moments from Skill 02 · Available dynamic variables from Airtable and HubSpot · B2B client profile (SaaS/cybersec marketers)</span>
+              </div>
+              <div class="skill-io-row">
+                <span class="skill-io-label label-out">OUT</span>
+                <span class="skill-io-text">1 automated email (subject + body, max 150 words, dynamic vars labeled) · 1 in-app portal banner (max 60 words, dismiss logic, CTA)</span>
+              </div>
+              <div class="skill-io-row">
+                <span class="skill-io-label label-rule">RULE</span>
+                <span class="skill-io-text">No corporate language. No false urgency. Never mention credits expiring as a threat. Sent from Strategist name, not brand name.</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1516,41 +1631,53 @@ Write two messages from the journey system:
     </div>
 
     <div class="tabs" id="tabs-05">
-      <button class="tab active" onclick="switchTab('05','skill')">Skill Prompt</button>
+      <button class="tab active" onclick="switchTab('05','skill')">How it was built</button>
       <button class="tab" onclick="switchTab('05','output')">Output</button>
     </div>
 
     <div class="tab-content active" id="05-skill">
-      <div class="skill-card">
-        <div class="skill-card-header">
-          <span class="filename">skills/05-analytics.md</span>
-          <span class="badge">Prompt</span>
+      <div class="skill-explain">
+        <div class="skill-explain-header">
+          <div class="left">
+            <div class="skill-eyebrow">Skill 05 · 05-analytics.md</div>
+            <h3>What do you measure, what's broken before day one, and what do you build first?</h3>
+            <p>This skill forces a builder's perspective: honest data gaps, leading (not lagging) metrics, a single critical path build for week one, and explicit reasoning for every scope cut. No filler — every sentence justifies a decision or surfaces a risk.</p>
+          </div>
+          <a class="skill-download" href="skills/05-analytics.md" download="05-analytics.md">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v9M4 8l4 4 4-4"/><path d="M2 13h12"/></svg>
+            Download skill
+          </a>
         </div>
-        <pre>## Role
-You are writing the rationale page for a lifecycle system built
-for StorySnap. This page must demonstrate that you think like a
-builder, not a planner: you know what to measure, what's broken
-before you start, and what to ship first.
-
-## Known data and tracking gaps
-- Airtable and HubSpot are not natively synced
-- Portal login data may not be in HubSpot
-- Champion departure exists as alert, not a CRM field
-- Pace Score does not exist as a computed field anywhere
-- Cross-brand credit usage not rolled up at account level
-
-## Your task
-1. 2–3 north star metrics — specific, measurable, leading not lagging
-2. Data and tracking gaps — 3–5 gaps and how to close each
-3. Week-one build — the single critical path item and why first
-4. Conscious scope cuts — what you chose not to build and why
-
-## Quality criteria
-- Metrics must be specific ("utilization rate at month 6",
-  not "engagement")
-- Data gaps must be honest — don't pretend day one works
-- Week-one build must be the actual critical path item
-- Scope cuts must have reasoning, not "ran out of time"</pre>
+        <div class="skill-explain-body">
+          <div>
+            <div class="skill-block-title">Approach & methods</div>
+            <div class="skill-tags">
+              <span class="skill-tag">Leading indicator selection</span>
+              <span class="skill-tag">Data gap audit</span>
+              <span class="skill-tag">Critical path reasoning</span>
+              <span class="skill-tag">Scope cut justification</span>
+              <span class="skill-tag">Year-one target setting</span>
+              <span class="skill-tag">Honest pre-launch assessment</span>
+            </div>
+          </div>
+          <div>
+            <div class="skill-block-title">Inputs → Outputs</div>
+            <div class="skill-io">
+              <div class="skill-io-row">
+                <span class="skill-io-label label-in">IN</span>
+                <span class="skill-io-text">Full system design from Skills 01–04 · Known data infrastructure (Airtable, HubSpot, portal) · Known gaps pre-disclosed in prompt</span>
+              </div>
+              <div class="skill-io-row">
+                <span class="skill-io-label label-out">OUT</span>
+                <span class="skill-io-text">3 north star metrics with targets · 5 data/tracking gaps with closure actions · Week-one build with rationale · 2 conscious scope cuts with reasoning</span>
+              </div>
+              <div class="skill-io-row">
+                <span class="skill-io-label label-rule">RULE</span>
+                <span class="skill-io-text">Metrics must be specific and measurable ("utilization rate at month 6", not "engagement"). "Ran out of time" is not an acceptable scope cut reason.</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
