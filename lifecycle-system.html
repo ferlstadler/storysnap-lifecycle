@@ -819,6 +819,401 @@
       margin: 2px;
     }
 
+    /* ── Message meta bar ── */
+    .msg-meta-bar {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .msg-meta-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .msg-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+    }
+
+    .chip-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+
+    .chip-val { color: var(--text-2); }
+
+    .msg-vars {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .vars-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-right: 2px;
+    }
+
+    /* ── Branded email ── */
+    .brand-email {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      margin-bottom: 20px;
+    }
+
+    .email-chrome {
+      background: #e5e7eb;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #d1d5db;
+    }
+
+    .email-chrome-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+
+    .email-chrome-subject {
+      flex: 1;
+      font-size: 12px;
+      color: #6b7280;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .brand-email-inner {
+      background: #f9fafb;
+    }
+
+    .th-email-header {
+      background: #0f172a;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+    }
+
+    .th-logo-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .th-logo-mark {
+      width: 32px; height: 32px;
+      background: #2563eb;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.02em;
+    }
+
+    .th-logo-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: #f1f5f9;
+      letter-spacing: -0.01em;
+    }
+
+    .th-email-body {
+      background: white;
+      padding: 36px 40px;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #1e293b;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .th-email-body p {
+      margin-bottom: 16px;
+    }
+
+    .th-greeting {
+      font-size: 15px;
+      color: #1e293b;
+    }
+
+    .th-email-body em {
+      font-style: italic;
+      color: #475569;
+    }
+
+    .th-signature {
+      margin-top: 28px;
+      padding-top: 16px;
+      border-top: 1px solid #f1f5f9;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .th-ps {
+      background: #f8fafc;
+      border-left: 3px solid #2563eb;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #475569;
+      border-radius: 0 6px 6px 0;
+      margin-top: 20px;
+      line-height: 1.6;
+    }
+
+    .th-email-footer {
+      background: #f1f5f9;
+      border-top: 1px solid #e2e8f0;
+      padding: 14px 40px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    /* ── Tone of voice row ── */
+    .tov-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .tov-item {
+      border-radius: 8px;
+      padding: 16px 18px;
+      font-size: 13px;
+    }
+
+    .tov-good {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+    }
+
+    .tov-bad {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+    }
+
+    .tov-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .tov-good .tov-label { color: #166534; }
+    .tov-bad .tov-label { color: #991b1b; }
+
+    .tov-item ul {
+      padding-left: 16px;
+      color: #374151;
+    }
+
+    .tov-item li { margin-bottom: 6px; line-height: 1.5; }
+
+    /* ── Branded portal mockup ── */
+    .brand-portal {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      margin-bottom: 20px;
+    }
+
+    .portal-chrome {
+      display: flex;
+      min-height: 280px;
+    }
+
+    .portal-chrome-left {
+      width: 160px;
+      background: #0f172a;
+      padding: 16px 0;
+      flex-shrink: 0;
+    }
+
+    .portal-nav-item {
+      padding: 8px 16px;
+      font-size: 12px;
+      color: #64748b;
+      cursor: pointer;
+    }
+
+    .portal-nav-active {
+      background: #1e293b;
+      color: #f1f5f9;
+      font-weight: 500;
+      border-right: 2px solid #6366f1;
+    }
+
+    .portal-chrome-main {
+      flex: 1;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .portal-topbar {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .portal-brand {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .portal-credits-badge {
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--accent-light);
+      color: var(--accent);
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+
+    .portal-banner {
+      margin: 16px;
+      background: white;
+      border: 1px solid #e0e7ff;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      box-shadow: 0 1px 4px rgba(99,102,241,0.08);
+    }
+
+    .portal-banner-accent {
+      width: 4px;
+      background: #6366f1;
+      flex-shrink: 0;
+    }
+
+    .portal-banner-content {
+      flex: 1;
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .portal-banner-icon {
+      width: 36px; height: 36px;
+      background: var(--accent-light);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .portal-banner-text { flex: 1; }
+
+    .portal-banner-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .portal-banner-body {
+      font-size: 12px;
+      color: var(--text-2);
+      line-height: 1.5;
+    }
+
+    .portal-banner-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      flex-shrink: 0;
+      padding-left: 8px;
+    }
+
+    .portal-cta {
+      display: inline-block;
+      background: #6366f1;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 6px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .portal-dismiss {
+      font-size: 11px;
+      color: #94a3b8;
+      cursor: pointer;
+      text-align: right;
+    }
+
+    .portal-ghost-content {
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .portal-ghost-row {
+      height: 12px;
+      background: #e2e8f0;
+      border-radius: 6px;
+      width: 100%;
+    }
+
+    /* ── Hero how block ── */
+    .hero-how {
+      margin-top: 36px;
+      padding-top: 28px;
+      border-top: 1px solid #1e293b;
+      max-width: 680px;
+    }
+
+    .hero-how-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #475569;
+      margin-bottom: 12px;
+    }
+
+    .hero-how p {
+      font-size: 14px;
+      color: #64748b;
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+
+    .hero-how p:last-child { margin-bottom: 0; }
+    .hero-how strong { color: #94a3b8; }
+
     /* ── Divider ── */
     .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
 
@@ -876,17 +1271,23 @@
     <p class="hero-sub">A lifecycle system for StorySnap built around one problem: clients who use their credits repurchase. Clients who don't, churn. This system is the engine that changes that ratio — at scale, across 300 accounts, without flooding two Strategists with noise.</p>
     <div class="hero-meta">
       <div class="meta-item">
-        <div class="meta-label">Approach</div>
-        <div class="meta-value">Skill-first, output-second</div>
-      </div>
-      <div class="meta-item">
-        <div class="meta-label">Each section</div>
-        <div class="meta-value">Prompt → AI output → rationale</div>
+        <div class="meta-label">Sections</div>
+        <div class="meta-value">5 deliverables</div>
       </div>
       <div class="meta-item">
         <div class="meta-label">Stack</div>
         <div class="meta-value">Airtable · HubSpot · Client Portal</div>
       </div>
+      <div class="meta-item">
+        <div class="meta-label">Time boxed</div>
+        <div class="meta-value">3–4 hours</div>
+      </div>
+    </div>
+
+    <div class="hero-how">
+      <div class="hero-how-label">How this was built</div>
+      <p>Each section of this document follows the same structure: a reusable AI skill was designed first — a structured prompt that encodes the problem, the constraints, the data sources, and the quality criteria. The skill was then run against the StorySnap brief to produce the output you see by default.</p>
+      <p>This is how I use AI in practice: not as a shortcut, but as a thinking partner with guardrails. The skill is the intellectual work. The output is what it produces. Toggle <strong>"How it was built"</strong> on any section to see the skill behind it — and download it if you want to run it yourself or adapt it to a different context.</p>
     </div>
   </div>
 
@@ -901,12 +1302,12 @@
     </div>
 
     <div class="tabs" id="tabs-01">
-      <button class="tab active" onclick="switchTab('01','skill')">How it was built</button>
-      <button class="tab" onclick="switchTab('01','output')">Output</button>
+      <button class="tab" onclick="switchTab(\'01\',\'skill\')">How it was built</button>
+      <button class="tab active" onclick="switchTab(\'01\',\'output\')">Output</button>
     </div>
 
     <!-- Skill -->
-    <div class="tab-content active" id="01-skill">
+    <div class="tab-content" id="01-skill">
       <div class="skill-explain">
         <div class="skill-explain-header">
           <div class="left">
@@ -953,7 +1354,7 @@
     </div>
 
     <!-- Output -->
-    <div class="tab-content" id="01-output">
+    <div class="tab-content active" id="01-output">
       <div class="output-card">
         <div class="output-body">
 
@@ -1128,11 +1529,11 @@
     </div>
 
     <div class="tabs" id="tabs-02">
-      <button class="tab active" onclick="switchTab('02','skill')">How it was built</button>
-      <button class="tab" onclick="switchTab('02','output')">Output</button>
+      <button class="tab" onclick="switchTab(\'02\',\'skill\')">How it was built</button>
+      <button class="tab active" onclick="switchTab(\'02\',\'output\')">Output</button>
     </div>
 
-    <div class="tab-content active" id="02-skill">
+    <div class="tab-content" id="02-skill">
       <div class="skill-explain">
         <div class="skill-explain-header">
           <div class="left">
@@ -1178,7 +1579,7 @@
       </div>
     </div>
 
-    <div class="tab-content" id="02-output">
+    <div class="tab-content active" id="02-output">
       <div class="output-card">
         <div class="output-body">
 
@@ -1316,11 +1717,11 @@
     </div>
 
     <div class="tabs" id="tabs-03">
-      <button class="tab active" onclick="switchTab('03','skill')">How it was built</button>
-      <button class="tab" onclick="switchTab('03','output')">Output</button>
+      <button class="tab" onclick="switchTab(\'03\',\'skill\')">How it was built</button>
+      <button class="tab active" onclick="switchTab(\'03\',\'output\')">Output</button>
     </div>
 
-    <div class="tab-content active" id="03-skill">
+    <div class="tab-content" id="03-skill">
       <div class="skill-explain">
         <div class="skill-explain-header">
           <div class="left">
@@ -1366,7 +1767,7 @@
       </div>
     </div>
 
-    <div class="tab-content" id="03-output">
+    <div class="tab-content active" id="03-output">
       <div class="output-card">
         <div class="output-body">
 
@@ -1502,11 +1903,11 @@ If expiration &lt; 90 days, flag for commercial conversation on first call.
     </div>
 
     <div class="tabs" id="tabs-04">
-      <button class="tab active" onclick="switchTab('04','skill')">How it was built</button>
-      <button class="tab" onclick="switchTab('04','output')">Output</button>
+      <button class="tab" onclick="switchTab(\'04\',\'skill\')">How it was built</button>
+      <button class="tab active" onclick="switchTab(\'04\',\'output\')">Output</button>
     </div>
 
-    <div class="tab-content active" id="04-skill">
+    <div class="tab-content" id="04-skill">
       <div class="skill-explain">
         <div class="skill-explain-header">
           <div class="left">
@@ -1552,68 +1953,165 @@ If expiration &lt; 90 days, flag for commercial conversation on first call.
       </div>
     </div>
 
-    <div class="tab-content" id="04-output">
+    <div class="tab-content active" id="04-output">
       <div class="output-card">
         <div class="output-body">
 
-          <h2>Message 1 — Automated Email</h2>
-
-          <div style="display:flex;gap:24px;margin-bottom:16px;flex-wrap:wrap;">
-            <div><span style="font-size:11px;color:var(--text-3);text-transform:uppercase;font-weight:600;">Trigger</span><br><span style="font-size:13px;color:var(--text-2);">Drifting journey, week 4 + <span class="flag">testimonial_blocked</span></span></div>
-            <div><span style="font-size:11px;color:var(--text-3);text-transform:uppercase;font-weight:600;">Segment</span><br><span style="font-size:13px;color:var(--text-2);">Drifting + testimonial_blocked</span></div>
-            <div><span style="font-size:11px;color:var(--text-3);text-transform:uppercase;font-weight:600;">Channel</span><br><span style="font-size:13px;color:var(--text-2);">HubSpot automated email</span></div>
-          </div>
-
-          <p><strong>Dynamic variables:</strong>
-            <span class="email-var">{{contact.first_name}}</span>
-            <span class="email-var">{{account.name}}</span>
-            <span class="email-var">{{account.testimonial_credits}}</span>
-            <span class="email-var">{{strategist.name}}</span>
-          </p>
-
-          <div class="email-preview">
-            <div class="email-header">
-              <div class="email-field"><strong>From:</strong> <span class="email-var">{{strategist.name}}</span> @ Testimonial Hero</div>
-              <div class="email-field"><strong>To:</strong> <span class="email-var">{{contact.first_name}}</span></div>
-              <div class="email-field"><strong>Subject:</strong> Getting customers on camera (what actually works)</div>
+          <!-- Message 1 meta -->
+          <div class="msg-meta-bar">
+            <div class="msg-meta-chips">
+              <div class="msg-chip"><span class="chip-label">Trigger</span><span class="chip-val">Drifting journey · week 4 + <span class="flag">testimonial_blocked</span></span></div>
+              <div class="msg-chip"><span class="chip-label">Segment</span><span class="chip-val">Drifting + testimonial_blocked</span></div>
+              <div class="msg-chip"><span class="chip-label">Channel</span><span class="chip-val">Automated email · HubSpot</span></div>
             </div>
-            <div class="email-body">
-              <p>Hi <span class="email-var">{{contact.first_name}}</span>,</p>
-              <p>Getting a customer to agree to a video testimonial is usually the hardest part — not the shoot, not the edit. The ask is where most teams stall.</p>
-              <p>What moves it: make the ask dead simple. A one-line message like "Would you be up for a 5-minute call about your experience with us?" converts better than a formal request with a lot of context.</p>
-              <p>We put together a short outreach guide for teams in <span class="email-var">{{account.name}}</span>'s space — it's what we send clients when things get stuck. Happy to drop it in your inbox.</p>
-              <p>Want me to send it over?</p>
-              <p><span class="email-var">{{strategist.name}}</span></p>
-              <p style="color:var(--text-3);font-size:13px;">P.S. You still have <span class="email-var">{{account.testimonial_credits}}</span> testimonial credits available. Remote shoots can be scheduled within a week once your customer says yes.</p>
+            <div class="msg-vars">
+              <span class="vars-label">Dynamic variables</span>
+              <span class="email-var">{{contact.first_name}}</span>
+              <span class="email-var">{{account.name}}</span>
+              <span class="email-var">{{account.testimonial_credits}}</span>
+              <span class="email-var">{{strategist.name}}</span>
             </div>
           </div>
 
-          <div class="design-note">Sent from the Strategist's name, not a generic sender. The guide offer gives the contact a reason to reply without committing to anything. The P.S. surfaces credit availability without making it a threat. Single CTA: reply yes to get the guide.</div>
+          <!-- TH Branded email -->
+          <div class="brand-email">
+            <!-- Email client chrome -->
+            <div class="email-chrome">
+              <div class="email-chrome-dot" style="background:#ff5f57"></div>
+              <div class="email-chrome-dot" style="background:#ffbd2e"></div>
+              <div class="email-chrome-dot" style="background:#28c840"></div>
+              <div class="email-chrome-subject">Getting customers on camera (what actually works)</div>
+            </div>
+            <!-- Email inner -->
+            <div class="brand-email-inner">
+              <!-- TH Header -->
+              <div class="th-email-header">
+                <div class="th-logo-area">
+                  <div class="th-logo-mark">TH</div>
+                  <div class="th-logo-text">Testimonial Hero</div>
+                </div>
+              </div>
+              <!-- Email body -->
+              <div class="th-email-body">
+                <p class="th-greeting">Hi <span class="email-var">{{contact.first_name}}</span>,</p>
+                <p>Getting a customer to agree to a video testimonial is usually the hardest part — not the shoot, not the edit. The ask is where most teams stall.</p>
+                <p>What moves it: make the ask dead simple. A one-line message like <em>"Would you be up for a 5-minute call about your experience with us?"</em> converts better than a formal request with a lot of context.</p>
+                <p>We put together a short outreach guide for teams in <span class="email-var">{{account.name}}</span>'s space — it's what we send clients when things get stuck. Happy to drop it in your inbox.</p>
+                <p style="margin-top:20px;"><strong>Want me to send it over?</strong></p>
+                <p class="th-signature"><span class="email-var">{{strategist.name}}</span><br><span style="color:#94a3b8;font-size:13px;">Account Strategist · Testimonial Hero</span></p>
+                <div class="th-ps">P.S. You still have <span class="email-var">{{account.testimonial_credits}}</span> testimonial credits available. Remote shoots can be scheduled within a week once your customer says yes.</div>
+              </div>
+              <!-- TH Footer -->
+              <div class="th-email-footer">
+                <span>© Testimonial Hero · A StorySnap Company</span>
+                <span>·</span>
+                <span style="text-decoration:underline;cursor:pointer;">Unsubscribe</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tone of voice breakdown -->
+          <div class="tov-row">
+            <div class="tov-item tov-good">
+              <div class="tov-label">✓ What this does</div>
+              <ul>
+                <li>Sent from Strategist's name — feels personal, not a platform blast</li>
+                <li>Offers something concrete (guide) with zero commitment required to reply</li>
+                <li>P.S. surfaces credits without making it a threat</li>
+                <li>Single CTA: reply yes — no calendar link, no form, no pressure</li>
+              </ul>
+            </div>
+            <div class="tov-item tov-bad">
+              <div class="tov-label">✗ What was avoided</div>
+              <ul>
+                <li>No "your credits are expiring" urgency framing</li>
+                <li>No corporate language ("leverage your remaining credits")</li>
+                <li>No generic subject line ("Checking in on your account")</li>
+                <li>No multi-CTA that splits attention</li>
+              </ul>
+            </div>
+          </div>
 
           <hr class="divider" />
 
-          <h2>Message 2 — In-App / Portal Banner</h2>
-
-          <div style="display:flex;gap:24px;margin-bottom:16px;flex-wrap:wrap;">
-            <div><span style="font-size:11px;color:var(--text-3);text-transform:uppercase;font-weight:600;">Trigger</span><br><span style="font-size:13px;color:var(--text-2);">Portal login + <span class="flag">single_service</span></span></div>
-            <div><span style="font-size:11px;color:var(--text-3);text-transform:uppercase;font-weight:600;">Segment</span><br><span style="font-size:13px;color:var(--text-2);">Healthy or Drifting + single_service</span></div>
-            <div><span style="font-size:11px;color:var(--text-3);text-transform:uppercase;font-weight:600;">Dismiss</span><br><span style="font-size:13px;color:var(--text-2);">After 1 view; don't repeat for 14 days</span></div>
+          <!-- Message 2 meta -->
+          <div class="msg-meta-bar">
+            <div class="msg-meta-chips">
+              <div class="msg-chip"><span class="chip-label">Trigger</span><span class="chip-val">Portal login + <span class="flag">single_service</span></span></div>
+              <div class="msg-chip"><span class="chip-label">Segment</span><span class="chip-val">Healthy or Drifting + single_service</span></div>
+              <div class="msg-chip"><span class="chip-label">Dismiss</span><span class="chip-val">After 1 view · suppress 14 days</span></div>
+            </div>
+            <div class="msg-vars">
+              <span class="vars-label">Dynamic variables</span>
+              <span class="email-var">{{account.credits_remaining}}</span>
+              <span class="email-var">{{account.deliverable_type_used}}</span>
+              <span class="email-var">{{account.brand_not_used}}</span>
+            </div>
           </div>
 
-          <p><strong>Dynamic variables:</strong>
-            <span class="email-var">{{account.credits_remaining}}</span>
-            <span class="email-var">{{account.deliverable_type_used}}</span>
-            <span class="email-var">{{account.brand_not_used}}</span>
-          </p>
-
-          <div class="inapp-preview">
-            <span class="close">✕</span>
-            <p>Your <span class="email-var">{{account.credits_remaining}}</span> credits work across everything we make — not just <span class="email-var">{{account.deliverable_type_used}}</span>.</p>
-            <p>Teams like yours are using <span class="email-var">{{account.brand_not_used}}</span> to make their product look as good as it performs. Same credits, different story.</p>
-            <span class="cta">See what's possible →</span>
+          <!-- Branded portal / in-app -->
+          <div class="brand-portal">
+            <!-- Portal chrome mockup -->
+            <div class="portal-chrome">
+              <div class="portal-chrome-left">
+                <div class="portal-nav-item portal-nav-active">Dashboard</div>
+                <div class="portal-nav-item">My Projects</div>
+                <div class="portal-nav-item">Deliverables</div>
+                <div class="portal-nav-item">Credits</div>
+              </div>
+              <div class="portal-chrome-main">
+                <div class="portal-topbar">
+                  <span class="portal-brand">StorySnap <span style="color:#475569;font-weight:400">/ Portal</span></span>
+                  <span class="portal-credits-badge"><span class="email-var">{{account.credits_remaining}}</span> credits</span>
+                </div>
+                <!-- In-app banner -->
+                <div class="portal-banner">
+                  <div class="portal-banner-accent"></div>
+                  <div class="portal-banner-content">
+                    <div class="portal-banner-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                    </div>
+                    <div class="portal-banner-text">
+                      <p class="portal-banner-title">Your credits work across everything we make</p>
+                      <p class="portal-banner-body">You've been using <span class="email-var">{{account.deliverable_type_used}}</span> — but <span class="email-var">{{account.brand_not_used}}</span> is included too. Same credits, different story.</p>
+                    </div>
+                    <div class="portal-banner-actions">
+                      <a class="portal-cta">See what's possible →</a>
+                      <span class="portal-dismiss">Dismiss</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- fake content behind -->
+                <div class="portal-ghost-content">
+                  <div class="portal-ghost-row"></div>
+                  <div class="portal-ghost-row" style="width:70%"></div>
+                  <div class="portal-ghost-row" style="width:85%"></div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="design-note">"Same credits, different story" removes the main cross-sell objection in B2B procurement: "do I need to buy something new?" The CTA links to the specific brand page for <code>{{account.brand_not_used}}</code> so it's contextual, not generic. Under 40 words — completable in one glance.</div>
+          <!-- Tone of voice breakdown -->
+          <div class="tov-row">
+            <div class="tov-item tov-good">
+              <div class="tov-label">✓ What this does</div>
+              <ul>
+                <li>Appears natively inside the portal — not an intrusive modal</li>
+                <li>"Same credits, different story" removes the #1 cross-sell objection in B2B: "do I need to buy something new?"</li>
+                <li>References what they already use — feels specific, not generic</li>
+                <li>Dismissable and suppressed for 14 days so it never becomes wallpaper</li>
+              </ul>
+            </div>
+            <div class="tov-item tov-bad">
+              <div class="tov-label">✗ What was avoided</div>
+              <ul>
+                <li>No popup that blocks the page ("Your session will expire...")</li>
+                <li>No credits urgency ("Don't waste your remaining credits!")</li>
+                <li>No generic CTA ("Learn more about our services")</li>
+                <li>No repeated show — once dismissed it stays gone for 2 weeks</li>
+              </ul>
+            </div>
+          </div>
 
         </div>
       </div>
@@ -1631,11 +2129,11 @@ If expiration &lt; 90 days, flag for commercial conversation on first call.
     </div>
 
     <div class="tabs" id="tabs-05">
-      <button class="tab active" onclick="switchTab('05','skill')">How it was built</button>
-      <button class="tab" onclick="switchTab('05','output')">Output</button>
+      <button class="tab" onclick="switchTab(\'05\',\'skill\')">How it was built</button>
+      <button class="tab active" onclick="switchTab(\'05\',\'output\')">Output</button>
     </div>
 
-    <div class="tab-content active" id="05-skill">
+    <div class="tab-content" id="05-skill">
       <div class="skill-explain">
         <div class="skill-explain-header">
           <div class="left">
@@ -1681,7 +2179,7 @@ If expiration &lt; 90 days, flag for commercial conversation on first call.
       </div>
     </div>
 
-    <div class="tab-content" id="05-output">
+    <div class="tab-content active" id="05-output">
       <div class="output-card">
         <div class="output-body">
 
