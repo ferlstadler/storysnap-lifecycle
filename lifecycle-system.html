@@ -1187,6 +1187,124 @@
       width: 100%;
     }
 
+    /* ── About section ── */
+    .about-section {
+      background: white;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: start;
+    }
+
+    .about-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .about-name {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+      border: none;
+      padding: 0;
+    }
+
+    .about-role {
+      font-size: 14px;
+      color: var(--text-3);
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    .about-bio {
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.75;
+      margin-bottom: 14px;
+    }
+
+    .about-links { margin-top: 20px; }
+
+    .about-link {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent-light);
+      padding-bottom: 1px;
+      transition: border-color 0.15s;
+    }
+
+    .about-link:hover { border-color: var(--accent); }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .about-stat {
+      background: var(--bg);
+      padding: 20px;
+    }
+
+    .about-stat-num {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .about-stat-label {
+      font-size: 12px;
+      color: var(--text-3);
+      line-height: 1.4;
+    }
+
+    .about-stack { }
+
+    .about-stack-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 10px;
+    }
+
+    .about-stack-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .about-tag {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text-2);
+    }
+
     /* ── Hero how block ── */
     .hero-how {
       margin-top: 36px;
@@ -1239,6 +1357,9 @@
     <a class="nav-link active" href="#hero">
       <span class="dot"></span> Introduction
     </a>
+    <a class="nav-link" href="#about">
+      <span class="dot"></span> About
+    </a>
     <div class="nav-label">Deliverables</div>
     <a class="nav-link" href="#seg">
       <span class="dot"></span> 01 Segmentation
@@ -1288,6 +1409,58 @@
       <div class="hero-how-label">How this was built</div>
       <p>Each section of this document follows the same structure: a reusable AI skill was designed first — a structured prompt that encodes the problem, the constraints, the data sources, and the quality criteria. The skill was then run against the StorySnap brief to produce the output you see by default.</p>
       <p>This is how I use AI in practice: not as a shortcut, but as a thinking partner with guardrails. The skill is the intellectual work. The output is what it produces. Toggle <strong>"How it was built"</strong> on any section to see the skill behind it — and download it if you want to run it yourself or adapt it to a different context.</p>
+    </div>
+  </div>
+
+  <!-- ── About ── -->
+  <div class="section about-section" id="about">
+    <div class="about-grid">
+      <div class="about-left">
+        <div class="about-eyebrow">Who built this</div>
+        <h2 class="about-name">Fernanda Stadler</h2>
+        <p class="about-role">Lifecycle Marketing &amp; CRM · Senior IC</p>
+        <p class="about-bio">I build the engine. I don't manage individual accounts — I design the segmentation models, behavioral triggers, and automated journeys that make account management scale. That's what this document is.</p>
+        <p class="about-bio">Currently at RD Station, where I run lifecycle across 9M+ active contacts using email, WhatsApp, SMS, push, and in-app. Before that: fintech, retail, gaming — always the same job, different context. Data as the starting point. Systems as the output. Results as the only measure.</p>
+        <p class="about-bio">I work in English, Portuguese, and Spanish. I've lived in Brazil, the US, and Germany. B2B SaaS is where I've done my best work.</p>
+        <div class="about-links">
+          <a href="https://fernandastadler.com" target="_blank" class="about-link">fernandastadler.com ↗</a>
+        </div>
+      </div>
+      <div class="about-right">
+        <div class="about-stats">
+          <div class="about-stat">
+            <div class="about-stat-num">9M+</div>
+            <div class="about-stat-label">contacts in active journeys</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-num">+35%</div>
+            <div class="about-stat-label">conversion via CRM</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-num">+400%</div>
+            <div class="about-stat-label">MQLs from cross-sell via propensity modeling</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-num">R$53K</div>
+            <div class="about-stat-label">NMRR generated in 7 months across 9 segments</div>
+          </div>
+        </div>
+        <div class="about-stack">
+          <div class="about-stack-label">Stack</div>
+          <div class="about-stack-tags">
+            <span class="about-tag">HubSpot</span>
+            <span class="about-tag">Salesforce</span>
+            <span class="about-tag">RD Station</span>
+            <span class="about-tag">Klaviyo</span>
+            <span class="about-tag">Adobe</span>
+            <span class="about-tag">SQL</span>
+            <span class="about-tag">Python</span>
+            <span class="about-tag">Power BI</span>
+            <span class="about-tag">GCP</span>
+            <span class="about-tag">Airtable</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -2289,7 +2462,7 @@ If expiration &lt; 90 days, flag for commercial conversation on first call.
   }
 
   // Highlight active nav on scroll
-  const sections = ['hero','seg','journey','strategist','copy','analytics'];
+  const sections = ['hero','about','seg','journey','strategist','copy','analytics'];
   const links = document.querySelectorAll('.nav-link');
 
   window.addEventListener('scroll', () => {
