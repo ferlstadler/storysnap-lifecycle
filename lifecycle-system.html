@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StorySnap — Lifecycle System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f8fafc;
+      --sidebar-bg: #0f172a;
+      --sidebar-text: #94a3b8;
+      --sidebar-active: #f1f5f9;
+      --sidebar-hover: #1e293b;
+      --accent: #6366f1;
+      --accent-light: #eef2ff;
+      --card: #ffffff;
+      --text: #0f172a;
+      --text-2: #475569;
+      --text-3: #94a3b8;
+      --border: #e2e8f0;
+      --code-bg: #0f172a;
+      --code-text: #e2e8f0;
+      --green: #10b981;
+      --green-bg: #ecfdf5;
+      --orange: #f59e0b;
+      --orange-bg: #fffbeb;
+      --red: #ef4444;
+      --red-bg: #fef2f2;
+      --purple: #8b5cf6;
+      --purple-bg: #f5f3ff;
+      --radius: 10px;
+      --sidebar-w: 240px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--sidebar-bg);
+      position: fixed;
+      top: 0; left: 0;
+      height: 100vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+    }
+
+    .sidebar-logo {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .sidebar-logo .brand {
+      font-size: 13px;
+      font-weight: 700;
+      color: #f1f5f9;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .sidebar-logo .sub {
+      font-size: 11px;
+      color: var(--sidebar-text);
+      margin-top: 2px;
+    }
+
+    .sidebar-nav { padding: 16px 0; flex: 1; }
+
+    .nav-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #475569;
+      padding: 12px 20px 6px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 20px;
+      color: var(--sidebar-text);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 400;
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+
+    .nav-link:hover { background: var(--sidebar-hover); color: var(--sidebar-active); }
+    .nav-link.active { background: var(--sidebar-hover); color: #f1f5f9; font-weight: 500; }
+
+    .nav-link .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #334155;
+      flex-shrink: 0;
+    }
+
+    .nav-link.active .dot { background: var(--accent); }
+
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid #1e293b;
+      font-size: 11px;
+      color: #475569;
+    }
+
+    /* ── Main content ── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      min-height: 100vh;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+      padding: 64px 64px 56px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%; right: -20%;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #6366f1;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 700;
+      color: #f1f5f9;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-sub {
+      font-size: 16px;
+      color: #94a3b8;
+      max-width: 560px;
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 32px;
+    }
+
+    .meta-item { }
+    .meta-label { font-size: 11px; color: #475569; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px; }
+    .meta-value { font-size: 14px; color: #cbd5e1; font-weight: 500; }
+
+    /* ── Section ── */
+    .section {
+      padding: 56px 64px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section:last-child { border-bottom: none; }
+
+    .section-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .section-number {
+      width: 36px; height: 36px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .section-title { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
+    .section-desc { font-size: 14px; color: var(--text-2); margin-top: 4px; }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      gap: 2px;
+      background: var(--border);
+      border-radius: 8px;
+      padding: 3px;
+      width: fit-content;
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      padding: 6px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--text-2);
+      transition: all 0.15s;
+    }
+
+    .tab.active {
+      background: var(--card);
+      color: var(--text);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ── Skill card ── */
+    .skill-card {
+      background: var(--code-bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid #1e293b;
+    }
+
+    .skill-card-header {
+      padding: 12px 20px;
+      border-bottom: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .skill-card-header .filename {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .skill-card-header .badge {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: #1e293b;
+      color: var(--accent);
+    }
+
+    .skill-card pre {
+      padding: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--code-text);
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-x: auto;
+      max-height: 480px;
+      overflow-y: auto;
+    }
+
+    .skill-card pre .comment { color: #475569; }
+    .skill-card pre .heading { color: #a78bfa; font-weight: 600; }
+    .skill-card pre .key { color: #6ee7b7; }
+    .skill-card pre .val { color: #fbbf24; }
+
+    /* ── Output card ── */
+    .output-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .output-body { padding: 28px 32px; }
+
+    /* ── Typography inside output ── */
+    .output-body h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 28px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .output-body h2:first-child { margin-top: 0; }
+
+    .output-body h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 20px 0 8px;
+    }
+
+    .output-body p { color: var(--text-2); margin-bottom: 12px; line-height: 1.7; }
+    .output-body p:last-child { margin-bottom: 0; }
+
+    .output-body strong { color: var(--text); font-weight: 600; }
+
+    .output-body code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--accent);
+    }
+
+    .output-body pre {
+      background: var(--code-bg);
+      border-radius: 8px;
+      padding: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--code-text);
+      line-height: 1.7;
+      white-space: pre-wrap;
+      margin: 12px 0;
+      border: 1px solid #1e293b;
+    }
+
+    .output-body ul, .output-body ol {
+      color: var(--text-2);
+      padding-left: 20px;
+      margin-bottom: 12px;
+    }
+
+    .output-body li { margin-bottom: 4px; line-height: 1.6; }
+
+    /* ── Tables ── */
+    .table-wrap { overflow-x: auto; margin: 16px 0; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    thead th {
+      background: var(--bg);
+      font-weight: 600;
+      color: var(--text);
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+
+    tbody td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-2);
+      vertical-align: top;
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: var(--bg); }
+
+    /* ── Badges / pills ── */
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+
+    .badge-auto { background: var(--green-bg); color: var(--green); }
+    .badge-monitor { background: var(--orange-bg); color: var(--orange); }
+    .badge-alert { background: #fef3c7; color: #d97706; }
+    .badge-urgent { background: var(--red-bg); color: var(--red); }
+    .badge-human { background: var(--purple-bg); color: var(--purple); }
+
+    /* ── Callout ── */
+    .callout {
+      border-left: 3px solid var(--accent);
+      background: var(--accent-light);
+      padding: 14px 18px;
+      border-radius: 0 8px 8px 0;
+      margin: 16px 0;
+      font-size: 13px;
+      color: #3730a3;
+    }
+
+    .callout strong { color: #3730a3; }
+
+    .callout-warn {
+      border-color: var(--orange);
+      background: var(--orange-bg);
+      color: #92400e;
+    }
+
+    .callout-warn strong { color: #92400e; }
+
+    /* ── Formula block ── */
+    .formula {
+      background: var(--code-bg);
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 500;
+      color: #a78bfa;
+      text-align: center;
+      margin: 12px 0;
+      border: 1px solid #1e293b;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Priority matrix ── */
+    .matrix-table thead th:first-child { width: 160px; }
+    .cell-auto { background: #ecfdf5; color: #065f46; font-size: 11px; font-weight: 600; text-align: center; }
+    .cell-monitor { background: #fffbeb; color: #92400e; font-size: 11px; font-weight: 600; text-align: center; }
+    .cell-watch { background: #fef3c7; color: #b45309; font-size: 11px; font-weight: 600; text-align: center; }
+    .cell-alert { background: #fef2f2; color: #991b1b; font-size: 11px; font-weight: 600; text-align: center; }
+    .cell-urgent { background: #dc2626; color: white; font-size: 11px; font-weight: 700; text-align: center; }
+
+    /* ── Journey step ── */
+    .journey { margin-bottom: 36px; }
+    .journey-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .journey-trigger {
+      font-size: 12px;
+      color: var(--text-3);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+    }
+
+    .journey-trigger strong { color: var(--text-2); }
+
+    .machine-human {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--text-2);
+    }
+
+    .machine-human strong { color: var(--text); }
+
+    /* ── Alert design ── */
+    .alert-preview {
+      background: var(--code-bg);
+      border-radius: 8px;
+      border: 1px solid #ef4444;
+      overflow: hidden;
+      margin: 16px 0;
+    }
+
+    .alert-preview-header {
+      background: #ef4444;
+      padding: 8px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: white;
+    }
+
+    .alert-preview pre {
+      padding: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--code-text);
+      line-height: 1.8;
+      white-space: pre-wrap;
+    }
+
+    /* ── Email preview ── */
+    .email-preview {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 16px 0;
+    }
+
+    .email-header {
+      background: var(--bg);
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .email-field { font-size: 12px; color: var(--text-3); margin-bottom: 4px; }
+    .email-field strong { color: var(--text-2); }
+    .email-field:last-child { margin-bottom: 0; }
+
+    .email-body {
+      padding: 20px 18px;
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.8;
+    }
+
+    .email-body p { margin-bottom: 14px; }
+    .email-body p:last-child { margin-bottom: 0; }
+
+    .email-var {
+      background: #ede9fe;
+      color: #5b21b6;
+      border-radius: 3px;
+      padding: 0 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+    }
+
+    /* ── In-app preview ── */
+    .inapp-preview {
+      background: #1e293b;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 16px 0;
+      border: 1px solid #334155;
+      position: relative;
+    }
+
+    .inapp-preview .close {
+      position: absolute;
+      top: 12px; right: 14px;
+      color: #64748b;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .inapp-preview p {
+      color: #e2e8f0;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .inapp-preview .cta {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* ── Metric cards ── */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .metric-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .metric-number {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .metric-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .metric-desc { font-size: 12px; color: var(--text-3); line-height: 1.5; }
+
+    /* ── Gap list ── */
+    .gap-item {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin-bottom: 10px;
+      position: relative;
+      padding-left: 48px;
+    }
+
+    .gap-item::before {
+      content: attr(data-n);
+      position: absolute;
+      left: 14px;
+      top: 16px;
+      width: 22px; height: 22px;
+      background: var(--accent-light);
+      color: var(--accent);
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gap-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .gap-desc { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+    .gap-action { font-size: 12px; color: var(--accent); margin-top: 6px; font-weight: 500; }
+
+    /* ── Week 1 card ── */
+    .week1-card {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin: 16px 0;
+    }
+
+    .week1-card .label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .week1-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 12px;
+    }
+
+    .week1-card p {
+      font-size: 14px;
+      color: #94a3b8;
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+
+    .week1-card p:last-child { margin-bottom: 0; }
+
+    /* ── Scope cut ── */
+    .scope-cut {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .scope-cut:last-child { border-bottom: none; }
+
+    .scope-cut .icon {
+      width: 28px; height: 28px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .scope-cut-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .scope-cut-desc { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+
+    /* ── Design note ── */
+    .design-note {
+      background: var(--bg);
+      border-left: 3px solid var(--text-3);
+      padding: 12px 16px;
+      border-radius: 0 6px 6px 0;
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--text-3);
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ── Flag chips ── */
+    .flag {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      background: var(--code-bg);
+      color: #6ee7b7;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid #1e293b;
+      margin: 2px;
+    }
+
+    /* ── Divider ── */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; }
+      .hero { padding: 40px 24px; }
+      .section { padding: 40px 24px; }
+      .metrics-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">StorySnap</div>
+    <div class="sub">Lifecycle System Design</div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-label">Overview</div>
+    <a class="nav-link active" href="#hero">
+      <span class="dot"></span> Introduction
+    </a>
+    <div class="nav-label">Deliverables</div>
+    <a class="nav-link" href="#seg">
+      <span class="dot"></span> 01 Segmentation
+    </a>
+    <a class="nav-link" href="#journey">
+      <span class="dot"></span> 02 Journey System
+    </a>
+    <a class="nav-link" href="#strategist">
+      <span class="dot"></span> 03 Strategist Layer
+    </a>
+    <a class="nav-link" href="#copy">
+      <span class="dot"></span> 04 Message Copy
+    </a>
+    <a class="nav-link" href="#analytics">
+      <span class="dot"></span> 05 Analytics & Rationale
+    </a>
+  </div>
+  <div class="sidebar-footer">
+    Fernanda Stadler · July 2026
+  </div>
+</nav>
+
+<!-- Main -->
+<div class="main">
+
+  <!-- Hero -->
+  <div class="hero" id="hero">
+    <div class="hero-eyebrow">Senior Lifecycle Marketing Manager · Mini Project</div>
+    <h1>No credit goes unused.</h1>
+    <p class="hero-sub">A lifecycle system for StorySnap built around one problem: clients who use their credits repurchase. Clients who don't, churn. This system is the engine that changes that ratio — at scale, across 300 accounts, without flooding two Strategists with noise.</p>
+    <div class="hero-meta">
+      <div class="meta-item">
+        <div class="meta-label">Approach</div>
+        <div class="meta-value">Skill-first, output-second</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Each section</div>
+        <div class="meta-value">Prompt → AI output → rationale</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Stack</div>
+        <div class="meta-value">Airtable · HubSpot · Client Portal</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Section 01: Segmentation ── -->
+  <div class="section" id="seg">
+    <div class="section-header">
+      <div class="section-number">01</div>
+      <div>
+        <div class="section-title">Segmentation Model</div>
+        <div class="section-desc">How to slice 300 accounts so the system can act on each one.</div>
+      </div>
+    </div>
+
+    <div class="tabs" id="tabs-01">
+      <button class="tab active" onclick="switchTab('01','skill')">Skill Prompt</button>
+      <button class="tab" onclick="switchTab('01','output')">Output</button>
+    </div>
+
+    <!-- Skill -->
+    <div class="tab-content active" id="01-skill">
+      <div class="skill-card">
+        <div class="skill-card-header">
+          <span class="filename">skills/01-segmentation.md</span>
+          <span class="badge">Prompt</span>
+        </div>
+        <pre>## Role
+You are a senior lifecycle marketing strategist designing an account
+segmentation model for StorySnap — a B2B video marketing holding
+company. Your output powers automated journeys and Strategist alerts.
+Every segment must be actionable. If it can't trigger something,
+it doesn't belong.
+
+## Context
+- Credit bundles (~$15–20K), 12-month terms
+- ~300 active accounts, 3–5 contacts each
+- 85% SaaS / cybersecurity, predominantly North America
+- Data: Airtable (credits, deliverables), HubSpot (contacts,
+  engagement), portal (logins), champion departure alerts
+- Two brands: Testimonial Hero + Product Hype. Credits interchangeable.
+  A third agency is launching — model must be brand-agnostic.
+
+## Known failure modes to encode
+- behind_pace: credits used << predicted by elapsed term
+- single_service: only one deliverable type, no cross-brand history
+- testimonial_blocked: has testimonial credits, none delivered in 60d+
+- lost_champion: primary contact departed, replacement not engaged
+- dark: no portal login + low email engagement in 30 days
+
+## Your task
+1. Pace Score definition — formula computable from Airtable only
+2. Segment definitions — max 6, mutually exclusive, each maps to action
+3. Flag system — 5 failure mode flags, detection logic, stackable
+4. Priority matrix — segment + flag count → escalation level
+
+## Quality criteria
+- Simpler beats comprehensive
+- No invented signals — all derivable from listed data sources
+- Must scale when a third/fourth brand is added</pre>
+      </div>
+    </div>
+
+    <!-- Output -->
+    <div class="tab-content" id="01-output">
+      <div class="output-card">
+        <div class="output-body">
+
+          <h2>1. Pace Score</h2>
+          <div class="formula">Pace Score = ( Credits Used / Credits Purchased ) ÷ ( Days Elapsed / 365 )</div>
+          <p>A score of <strong>1.0</strong> means the account is consuming credits exactly proportional to time elapsed. Above 1.0 = ahead of pace. Below 1.0 = behind.</p>
+          <p><strong>Example:</strong> Month 6 of 12 (50% term elapsed), client used 35% of credits → <code>0.35 / 0.50 = 0.70</code> → Drifting.</p>
+          <p><strong>Computed from Airtable:</strong> credits_purchased, credits_used, purchase_date. No external data needed.</p>
+          <div class="design-note">I avoided weighting by deliverable type or recent velocity because the data to support it isn't reliably structured yet. The simple ratio is computable today and corrects as usage patterns emerge. Velocity trending is the next layer to add once the score is live.</div>
+
+          <h2>2. Segment Definitions</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Segment</th>
+                  <th>Qualifying Signal</th>
+                  <th>Primary Action</th>
+                  <th>Owner</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>New</strong></td>
+                  <td>0–30 days post-purchase</td>
+                  <td>Onboarding — set expectations, introduce portal, introduce all brands</td>
+                  <td><span class="badge badge-auto">Automated</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Accelerating</strong></td>
+                  <td>Pace Score &gt; 1.2</td>
+                  <td>Cross-sell awareness + early renewal prep</td>
+                  <td><span class="badge badge-auto">Automated</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Healthy</strong></td>
+                  <td>Pace Score 0.80–1.20, month 2+</td>
+                  <td>Light nurture, cross-brand education, social proof</td>
+                  <td><span class="badge badge-auto">Automated</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Drifting</strong></td>
+                  <td>Pace Score 0.50–0.79</td>
+                  <td>Re-engagement nudges; Strategist notified but doesn't act yet</td>
+                  <td><span class="badge badge-monitor">Monitor</span></td>
+                </tr>
+                <tr>
+                  <td><strong>At Risk</strong></td>
+                  <td>Pace Score &lt; 0.50 after month 3 OR 2+ active flags</td>
+                  <td>Automated escalation + Strategist alert triggered</td>
+                  <td><span class="badge badge-human">Strategist</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Expiration Watch</strong></td>
+                  <td>&lt; 60 days to term end AND &gt; 20% credits remaining (any segment)</td>
+                  <td>Immediate Strategist escalation; automated urgency message</td>
+                  <td><span class="badge badge-urgent">Urgent</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="design-note">Expiration Watch is an override — it surfaces any account when the time window becomes critical, regardless of current segment. I considered splitting Drifting into Early/Late but that added a seventh segment without changing the action. The 0.50 threshold is where drift starts to compound: accounts below it rarely self-correct.</div>
+
+          <h2>3. Flag System</h2>
+          <p>Flags are account-level failure mode indicators. They stack freely on top of any segment.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Flag</th>
+                  <th>Detection Logic</th>
+                  <th>Data Source</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="flag">behind_pace</span></td>
+                  <td>Pace Score &lt; 0.80 for 2 consecutive weekly checks</td>
+                  <td>Airtable</td>
+                </tr>
+                <tr>
+                  <td><span class="flag">single_service</span></td>
+                  <td>Only 1 unique deliverable type across all completed deliverables; no cross-brand history</td>
+                  <td>Airtable</td>
+                </tr>
+                <tr>
+                  <td><span class="flag">testimonial_blocked</span></td>
+                  <td>Testimonial credits in purchase + no testimonial completed in 60+ days + Pace Score &lt; 0.80</td>
+                  <td>Airtable</td>
+                </tr>
+                <tr>
+                  <td><span class="flag">lost_champion</span></td>
+                  <td>Primary contact departure detected AND replacement has &lt; 2 email opens in last 30 days</td>
+                  <td>HubSpot + departure alert</td>
+                </tr>
+                <tr>
+                  <td><span class="flag">dark</span></td>
+                  <td>No portal login in 30 days AND average open rate on last 4 sends &lt; 20%</td>
+                  <td>Portal + HubSpot</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="design-note"><code>dark</code> requires two signals to avoid false positives from clients who don't open marketing email but are still active in the portal. <code>testimonial_blocked</code> is narrow by design — it only fires when there's evidence the client has testimonial credits and isn't using them, not just any slow account.</div>
+
+          <h2>4. Priority Matrix</h2>
+          <div class="table-wrap">
+            <table class="matrix-table">
+              <thead>
+                <tr>
+                  <th>Segment</th>
+                  <th>0 flags</th>
+                  <th>1 flag</th>
+                  <th>2+ flags</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>New</strong></td>
+                  <td class="cell-auto">Automated</td>
+                  <td class="cell-auto">Automated</td>
+                  <td class="cell-watch">Strategist watch</td>
+                </tr>
+                <tr>
+                  <td><strong>Accelerating</strong></td>
+                  <td class="cell-auto">Automated</td>
+                  <td class="cell-auto">Automated</td>
+                  <td class="cell-monitor">Monitor</td>
+                </tr>
+                <tr>
+                  <td><strong>Healthy</strong></td>
+                  <td class="cell-auto">Automated</td>
+                  <td class="cell-monitor">Monitor</td>
+                  <td class="cell-watch">Strategist watch</td>
+                </tr>
+                <tr>
+                  <td><strong>Drifting</strong></td>
+                  <td class="cell-auto">Automated</td>
+                  <td class="cell-watch">Strategist watch</td>
+                  <td class="cell-alert">Strategist alert</td>
+                </tr>
+                <tr>
+                  <td><strong>At Risk</strong></td>
+                  <td class="cell-alert">Strategist alert</td>
+                  <td class="cell-alert">Strategist alert</td>
+                  <td class="cell-urgent">URGENT</td>
+                </tr>
+                <tr>
+                  <td><strong>Expiration Watch</strong></td>
+                  <td class="cell-urgent">URGENT</td>
+                  <td class="cell-urgent">URGENT</td>
+                  <td class="cell-urgent">URGENT</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="design-note">At Risk always becomes a Strategist alert regardless of flag count because the compounding effect means waiting for a second flag is too late. Accelerating + flags is intentionally low urgency — a fast-spending account with a lost champion is concerning, but the primary problem is the departure, not the spend rate.</div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Section 02: Journey System ── -->
+  <div class="section" id="journey">
+    <div class="section-header">
+      <div class="section-number">02</div>
+      <div>
+        <div class="section-title">Journey System</div>
+        <div class="section-desc">Triggers, branches, channels, and the exact line between machine and human.</div>
+      </div>
+    </div>
+
+    <div class="tabs" id="tabs-02">
+      <button class="tab active" onclick="switchTab('02','skill')">Skill Prompt</button>
+      <button class="tab" onclick="switchTab('02','output')">Output</button>
+    </div>
+
+    <div class="tab-content active" id="02-skill">
+      <div class="skill-card">
+        <div class="skill-card-header">
+          <span class="filename">skills/02-journey-system.md</span>
+          <span class="badge">Prompt</span>
+        </div>
+        <pre>## Role
+You are designing the automated journey system for StorySnap.
+You are mapping triggers, branches, channel decisions, and timing
+for each key segment. You build the engine. Strategists drive the car.
+
+## Key context
+- Best clients repurchase around month 6–7, not at expiration.
+  Replicate that behavior at scale.
+- Clients who fall behind drift further. Early intervention beats rescue.
+- Specific nudges outperform generic sends.
+- Channels: automated email (HubSpot), in-app/portal message,
+  Strategist task (HubSpot)
+
+## For each segment journey:
+1. Entry trigger — exact signal that enrolls the account
+2. Journey steps — timing, channel, message intent, branch conditions
+3. Machine / Human split — where automation stops and why
+4. Exit conditions — what removes an account from the journey
+
+## Design principles
+- Automate what scales. Hand off what requires judgment or relationship.
+- Never automate a message that could embarrass a Strategist if
+  the client replies about it.
+- The Strategist alert is a product, not an afterthought.
+- No journey exceeds 5–6 steps before requiring a human decision.
+- B2B = no urgency pressure tactics. Tone stays consultative.</pre>
+      </div>
+    </div>
+
+    <div class="tab-content" id="02-output">
+      <div class="output-card">
+        <div class="output-body">
+
+          <!-- Journey 1 -->
+          <div class="journey">
+            <div class="journey-title">
+              <span class="badge badge-auto">New</span>
+              Journey 1 — New Account Onboarding (days 0–30)
+            </div>
+            <div class="journey-trigger"><strong>Entry trigger:</strong> SOW signed / purchase confirmed in Airtable (day 0)</div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Step</th><th>Timing</th><th>Channel</th><th>Intent</th><th>Branch</th></tr></thead>
+                <tbody>
+                  <tr><td>1</td><td>Day 1</td><td>Email</td><td>Welcome + portal access. Introduce all brands, not just what they bought. Set expectation: Strategist in touch this week.</td><td>—</td></tr>
+                  <tr><td>2</td><td>Day 7</td><td>In-app</td><td>"Ready to kick off your first project?" Prompt to schedule first creative brief.</td><td>If brief scheduled → monitor</td></tr>
+                  <tr><td>3</td><td>Day 14</td><td>Email</td><td>"Here's what your credits can do" — brand-agnostic deliverable menu with SaaS/cybersec examples.</td><td>If no deliverable started → continue</td></tr>
+                  <tr><td>4</td><td>Day 21</td><td>Strategist task</td><td>"New account, no project kicked off in 21 days. Recommend outreach." Includes: contacts, credits, flags.</td><td>Strategist acts → exit</td></tr>
+                  <tr><td>5</td><td>Day 30</td><td>System</td><td>Re-evaluate into segment. Deliverable started → Healthy. Not started → At Risk.</td><td>—</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="machine-human"><strong>Machine / Human split:</strong> Machine owns days 1–14. Strategist flagged at day 21 — early enough to act before the account is already drifting.</div>
+          </div>
+
+          <hr class="divider" />
+
+          <!-- Journey 2 -->
+          <div class="journey">
+            <div class="journey-title">
+              <span class="badge badge-monitor">Drifting</span>
+              Journey 2 — Drifting Re-engagement
+            </div>
+            <div class="journey-trigger"><strong>Entry trigger:</strong> Pace Score drops below 0.80 for 2 consecutive weekly Airtable syncs</div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Step</th><th>Timing</th><th>Channel</th><th>Intent</th><th>Branch</th></tr></thead>
+                <tbody>
+                  <tr><td>1</td><td>Week 0</td><td>Email</td><td>Specific nudge: "You've used <code>{{credits_used}}</code> of <code>{{credits_total}}</code>. Here's a deliverable type you haven't tried yet."</td><td>Pace improves → exit</td></tr>
+                  <tr><td>2</td><td>Week 2</td><td>In-app</td><td>On next portal login: "Pick up where you left off" + direct link to start a new project brief.</td><td>Project started → exit</td></tr>
+                  <tr><td>3</td><td>Week 4</td><td>Email</td><td>Social proof: "[Similar SaaS] used their remaining credits on [type]. Here's what they made." CTA: 20-min review call.</td><td>Call booked → exit</td></tr>
+                  <tr><td>4</td><td>Week 6</td><td>Strategist task</td><td>"6 weeks drifting, no response to 3 automated touches. Recommend personal outreach." Includes: pace score, credits, days to expiration, active flags, last engagement date.</td><td>Strategist acts → exit</td></tr>
+                  <tr><td>4b</td><td>Week 6</td><td>Task modifier</td><td>If <span class="flag">testimonial_blocked</span> active → append testimonial blocker talking points to task.</td><td>—</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="machine-human"><strong>Machine / Human split:</strong> Weeks 0–4 fully automated. Strategist enters at week 6. After 3 touches with no response, another automated email is noise. A human call is the only thing that changes behavior at this stage in B2B.</div>
+          </div>
+
+          <hr class="divider" />
+
+          <!-- Journey 3 -->
+          <div class="journey">
+            <div class="journey-title">
+              <span class="badge badge-alert">At Risk</span>
+              Journey 3 — At Risk Escalation
+            </div>
+            <div class="journey-trigger"><strong>Entry trigger:</strong> Pace Score &lt; 0.50 after month 3 OR any account with 2+ active flags</div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Step</th><th>Timing</th><th>Channel</th><th>Intent</th><th>Branch</th></tr></thead>
+                <tbody>
+                  <tr><td>1</td><td>Day 0 (immediate)</td><td>Strategist alert</td><td>Full account snapshot: pace score, credits, days to expiration, active flags, last deliverable, last email open, last portal login. Priority: 48h action.</td><td>Strategist acts → monitor</td></tr>
+                  <tr><td>2</td><td>Day 0</td><td>Email</td><td>Warm check-in to all contacts: "Quick note on your credits — we want to make sure you get the most out of your bundle." Non-alarming. CTA: schedule review call.</td><td>If engaged → Strategist follows up</td></tr>
+                  <tr><td>3</td><td>Day 3</td><td>In-app</td><td>On next portal login: "Your account team has ideas for your remaining credits." CTA: book a call.</td><td>No engagement → continue</td></tr>
+                  <tr><td>4</td><td>Day 7</td><td>Strategist task</td><td>"No client response in 7 days. Escalate?"</td><td>Strategist escalates or marks contacted</td></tr>
+                  <tr><td>5</td><td>Day 14</td><td>System</td><td>No movement → override into Expiration Watch protocol regardless of days remaining.</td><td>—</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="machine-human"><strong>Machine / Human split:</strong> Alert fires immediately — Strategist is in the loop from day 0. Machine sends one client-facing email on day 0 to keep the account warm. Machine does not send additional automated messages without Strategist clearance.</div>
+          </div>
+
+          <hr class="divider" />
+
+          <!-- Journey 4 -->
+          <div class="journey">
+            <div class="journey-title">
+              <span class="badge badge-urgent">Urgent</span>
+              Journey 4 — Expiration Watch
+            </div>
+            <div class="journey-trigger"><strong>Entry trigger:</strong> System detects &lt; 60 days to term end AND &gt; 20% credits remaining (any segment)</div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Step</th><th>Timing</th><th>Channel</th><th>Intent</th><th>Branch</th></tr></thead>
+                <tbody>
+                  <tr><td>1</td><td>Day 0 (immediate)</td><td>Strategist URGENT alert</td><td>"X credits expiring in Y days. Same-day action required." Full account snapshot + repurchase history.</td><td>Strategist calls client → exit auto</td></tr>
+                  <tr><td>2</td><td>Day 0</td><td>Email</td><td>All contacts: "Your credits are available through [expiration date]." Lists achievable deliverable options with production time estimates.</td><td>Response → Strategist follows up</td></tr>
+                  <tr><td>3</td><td>Day 3</td><td>Strategist task</td><td>If no HubSpot call or meeting logged: "No activity in 3 days. Escalate to manager?"</td><td>—</td></tr>
+                  <tr><td>4</td><td>Day 14 (&lt;46d left)</td><td>Email</td><td>"Here's what you can still produce before [date]" — shorter list, realistic given timeline.</td><td>—</td></tr>
+                  <tr><td>5</td><td>Day 30 (&lt;30d left)</td><td>In-app</td><td>On portal login: "You have [X] credits and [N] days. Here's what's still possible." Direct CTA.</td><td>—</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="machine-human"><strong>Machine / Human split:</strong> Strategist owns the commercial conversation (extension vs. rollover vs. repurchase). Machine creates helpful urgency without pressure. Alert fires 60 days out — Strategist is never blindsided.</div>
+          </div>
+
+          <hr class="divider" />
+
+          <!-- Journey 5 -->
+          <div class="journey">
+            <div class="journey-title">
+              <span class="badge badge-human">Flag overlay</span>
+              Journey 5 — Lost Champion Recovery
+            </div>
+            <div class="journey-trigger"><strong>Entry trigger:</strong> Champion departure alert fires AND replacement contact has &lt; 2 email opens in last 30 days. Overlays the account's primary segment journey — pauses automated messages.</div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Step</th><th>Timing</th><th>Channel</th><th>Intent</th><th>Branch</th></tr></thead>
+                <tbody>
+                  <tr><td>1</td><td>Day 0 (immediate)</td><td>Strategist URGENT alert</td><td>"[Name] left [Company]. Replacement: [Name/role]. Account is [segment] with [X] credits and [Y] days. Do NOT re-enroll in automated sequences."</td><td>—</td></tr>
+                  <tr><td>2</td><td>Day 0</td><td>System</td><td>Pause all automated emails and in-app messages for this account.</td><td>—</td></tr>
+                  <tr><td>3</td><td>Day 3</td><td>Strategist — manual</td><td>Personal intro to replacement contact. Uses talking points from Section 03.</td><td>Response → continue</td></tr>
+                  <tr><td>4</td><td>Day 14</td><td>Strategist task reminder</td><td>"No outreach recorded. Account paused. Action?"</td><td>—</td></tr>
+                  <tr><td>5</td><td>Day 21</td><td>System</td><td>If replacement has 2+ opens or portal login → re-enroll in segment journey. If not → weekly Strategist task created.</td><td>—</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="machine-human"><strong>Machine / Human split:</strong> Machine does nothing client-facing here. Every touchpoint with a new champion must be human. The cost of an automated message landing with someone who has no context for the account is too high in a $15–20K relationship.</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Section 03: Strategist Layer ── -->
+  <div class="section" id="strategist">
+    <div class="section-header">
+      <div class="section-number">03</div>
+      <div>
+        <div class="section-title">Strategist Layer</div>
+        <div class="section-desc">What Strategists receive, when, and in what form — so they can act in minutes, not hours.</div>
+      </div>
+    </div>
+
+    <div class="tabs" id="tabs-03">
+      <button class="tab active" onclick="switchTab('03','skill')">Skill Prompt</button>
+      <button class="tab" onclick="switchTab('03','output')">Output</button>
+    </div>
+
+    <div class="tab-content active" id="03-skill">
+      <div class="skill-card">
+        <div class="skill-card-header">
+          <span class="filename">skills/03-strategist-layer.md</span>
+          <span class="badge">Prompt</span>
+        </div>
+        <pre>## Role
+You are designing the Strategist-facing layer of StorySnap's
+lifecycle system. Account Strategists are the real users of
+what you build. Design what they receive, when, and in what
+form — so they can act immediately without extra research.
+
+## The Strategist layer must solve:
+- Alert fatigue: if everything is urgent, nothing is
+- Context on delivery: why they're being alerted, not just what
+- Readiness to act: open the account and act within minutes
+- Champion handoff: who left, who replaced, account status at
+  that exact moment
+
+## Your task
+1. Alert taxonomy — types, priority levels, triggers, channels
+2. One fully designed alert — highest-impact, all fields specified
+3. One talking points template — for the same trigger
+
+## Design principles
+- Fewer alerts, not more. Ruthlessly prioritize.
+- Every alert must answer: what happened, why it matters, next action.
+- Talking points are account management ammunition, not marketing copy.
+- The champion departure alert is the most important one to get right.</pre>
+      </div>
+    </div>
+
+    <div class="tab-content" id="03-output">
+      <div class="output-card">
+        <div class="output-body">
+
+          <h2>1. Alert Taxonomy</h2>
+          <div class="callout"><strong>Design principle:</strong> Alert volume is the enemy of action. URGENT alerts must stay rare. Drifting No Response and Cross-sell are batched weekly to avoid per-account noise. Only three alerts fire in real time.</div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Alert Type</th><th>Trigger</th><th>Priority</th><th>Channel</th><th>Frequency</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>At Risk</strong></td>
+                  <td>Pace Score &lt; 0.50 after month 3 OR 2+ active flags</td>
+                  <td><span class="badge badge-alert">Alert · 48h</span></td>
+                  <td>HubSpot task + email</td>
+                  <td>On trigger; weekly reminder if no action</td>
+                </tr>
+                <tr>
+                  <td><strong>Expiration Watch</strong></td>
+                  <td>&lt; 60 days to expiration AND &gt; 20% credits</td>
+                  <td><span class="badge badge-urgent">Urgent · same day</span></td>
+                  <td>HubSpot task + email</td>
+                  <td>On trigger; escalation at day 3</td>
+                </tr>
+                <tr>
+                  <td><strong>Lost Champion</strong></td>
+                  <td>Departure detected + replacement &lt; 2 opens in 30d</td>
+                  <td><span class="badge badge-urgent">Urgent</span> if &lt; 90d to exp; <span class="badge badge-alert">Alert</span> otherwise</td>
+                  <td>HubSpot task + email</td>
+                  <td>On trigger; weekly task if no engagement after 21d</td>
+                </tr>
+                <tr>
+                  <td><strong>Drifting, No Response</strong></td>
+                  <td>Drifting journey for 6 weeks, no engagement</td>
+                  <td><span class="badge badge-monitor">Weekly queue</span></td>
+                  <td>HubSpot task batch</td>
+                  <td>Weekly batch — not individual alerts</td>
+                </tr>
+                <tr>
+                  <td><strong>Cross-sell Opportunity</strong></td>
+                  <td>Accelerating or Healthy + <span class="flag">single_service</span></td>
+                  <td><span class="badge badge-auto">Watch</span></td>
+                  <td>Weekly digest</td>
+                  <td>Weekly digest — not individual alerts</td>
+                </tr>
+                <tr>
+                  <td><strong>New Account, No Kickoff</strong></td>
+                  <td>No deliverable started by day 21</td>
+                  <td><span class="badge badge-monitor">Watch · 48h</span></td>
+                  <td>HubSpot task</td>
+                  <td>Day 21; single alert</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2>2. Fully Designed Alert: Lost Champion</h2>
+          <p><strong>Why this one:</strong> It's where timing and context matter most. An Expiration Watch alert is urgent but the action is clear. Lost Champion requires the Strategist to make judgment calls — is the replacement the right person? Is the account worth prioritizing? The alert must answer those questions in 60 seconds.</p>
+
+          <div class="alert-preview">
+            <div class="alert-preview-header">HubSpot Task — URGENT</div>
+            <pre>[URGENT] Champion Departed — {{account.name}} | {{credits.remaining}} credits | {{days.to_expiration}} days left
+
+WHAT HAPPENED
+{{contact.departed_name}} ({{contact.departed_title}}) left {{account.name}} on {{contact.departure_date}}.
+
+ACCOUNT SNAPSHOT
+Segment:           {{account.segment}}
+Pace Score:        {{account.pace_score}} → {{pace.status}}
+Credits remaining: {{credits.remaining}} of {{credits.total}} ({{credits.pct_unused}}% unused)
+Days to expiration: {{days.to_expiration}}
+Last deliverable:  {{deliverable.last_type}} completed on {{deliverable.last_date}}
+Active flags:      {{account.flags}}
+Last email open:   {{engagement.last_open_date}}
+Last portal login: {{portal.last_login_date}}
+
+REPLACEMENT CONTACT
+Name:  {{contact.replacement_name}}
+Title: {{contact.replacement_title}}
+Email: {{contact.replacement_email}}
+Engagement: {{contact.replacement_opens}} opens since identified
+
+SUGGESTED NEXT ACTION
+Send personal introduction within 48h using the talking points below.
+Do NOT re-enroll in automated sequences until new contact has engaged.
+If expiration &lt; 90 days, flag for commercial conversation on first call.
+
+[View account in HubSpot]  [Open talking points]</pre>
+          </div>
+
+          <h2>3. Talking Points: Lost Champion Outreach</h2>
+          <div class="callout callout-warn"><strong>Context:</strong> New contact may or may not know about the StorySnap relationship. Do not assume they do.</div>
+
+          <h3>Opening — acknowledge the transition directly</h3>
+          <p>"Hi [Name], I'm [Strategist] from [brand they purchased]. I wanted to reach out directly — I know transitions like this come with a lot on your plate, and I didn't want this account to fall through the cracks."</p>
+
+          <h3>Orient them, don't pitch them</h3>
+          <ul>
+            <li>"Here's where things stand: [Company] has [X] credits available through [expiration date]. So far the team has produced [deliverable types] — I can send you links to everything that's been made."</li>
+            <li>"There's still [X] credits to work with, and enough time to produce [realistic options given timeline]."</li>
+            <li>Lead with "here's what exists and here's what's still possible." Not urgency.</li>
+          </ul>
+
+          <h3>The ask — low commitment</h3>
+          <p>"Would you be open to a 20-minute call? I can walk you through what's been done, show you what's available, and we can figure out together whether there's anything useful to produce before the term ends."</p>
+
+          <h3>If expiration is &lt; 90 days</h3>
+          <p>"Just worth knowing: the current bundle runs through [date]. Happy to talk through options — including whether it makes sense to roll anything forward."</p>
+
+          <h3>If <span class="flag">single_service</span> flag is active</h3>
+          <p>"One thing worth mentioning: [Company] has only used [brand/type] so far. The credits work across everything we make — including [other brand]. Happy to show you what else is available."</p>
+
+          <h3>What to avoid</h3>
+          <ul>
+            <li>Do not reference the departed champion negatively</li>
+            <li>Do not open with credit urgency — it sounds like a collections call</li>
+            <li>Do not send a calendar link in the first message — it presumes too much</li>
+            <li>Do not CC or BCC the departed contact</li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Section 04: Copy ── -->
+  <div class="section" id="copy">
+    <div class="section-header">
+      <div class="section-number">04</div>
+      <div>
+        <div class="section-title">Message Copy</div>
+        <div class="section-desc">Two automated messages that sound like a person wrote them for this specific account.</div>
+      </div>
+    </div>
+
+    <div class="tabs" id="tabs-04">
+      <button class="tab active" onclick="switchTab('04','skill')">Skill Prompt</button>
+      <button class="tab" onclick="switchTab('04','output')">Output</button>
+    </div>
+
+    <div class="tab-content active" id="04-skill">
+      <div class="skill-card">
+        <div class="skill-card-header">
+          <span class="filename">skills/04-copy.md</span>
+          <span class="badge">Prompt</span>
+        </div>
+        <pre>## Role
+You are a senior lifecycle marketing copywriter writing automated
+messages for StorySnap. Your copy must sound like a smart human
+wrote it for this specific account. Punchy, non-salesy, specific.
+
+## Voice and tone rules
+- Direct, warm, specific
+- No corporate language ("leverage", "maximize", "unlock")
+- No false urgency ("Act now!", "Don't miss out!")
+- References real account data when possible
+- Short paragraphs. One idea per sentence.
+- Subject lines under 8 words
+
+## Your task
+Write two messages from the journey system:
+
+1. One automated email — highest-impact trigger moment.
+   Specify trigger, segment, subject + body (max 150 words),
+   dynamic variable placeholders.
+
+2. One in-app / portal message — contextual nudge (max 60 words).
+   Feel native to the product, not like a pop-up ad.
+
+## Quality criteria
+- A real person should not be able to tell it was automated
+- Every dynamic variable must be pullable from Airtable or HubSpot
+- Email: single clear CTA
+- In-app: completable in one glance
+- Neither message should mention credits expiring like a threat</pre>
+      </div>
+    </div>
+
+    <div class="tab-content" id="04-output">
+      <div class="output-card">
+        <div class="output-body">
+
+          <h2>Message 1 — Automated Email</h2>
+
+          <div style="display:flex;gap:24px;margin-bottom:16px;flex-wrap:wrap;">
+            <div><span style="font-size:11px;color:var(--text-3);text-transform:uppercase;font-weight:600;">Trigger</span><br><span style="font-size:13px;color:var(--text-2);">Drifting journey, week 4 + <span class="flag">testimonial_blocked</span></span></div>
+            <div><span style="font-size:11px;color:var(--text-3);text-transform:uppercase;font-weight:600;">Segment</span><br><span style="font-size:13px;color:var(--text-2);">Drifting + testimonial_blocked</span></div>
+            <div><span style="font-size:11px;color:var(--text-3);text-transform:uppercase;font-weight:600;">Channel</span><br><span style="font-size:13px;color:var(--text-2);">HubSpot automated email</span></div>
+          </div>
+
+          <p><strong>Dynamic variables:</strong>
+            <span class="email-var">{{contact.first_name}}</span>
+            <span class="email-var">{{account.name}}</span>
+            <span class="email-var">{{account.testimonial_credits}}</span>
+            <span class="email-var">{{strategist.name}}</span>
+          </p>
+
+          <div class="email-preview">
+            <div class="email-header">
+              <div class="email-field"><strong>From:</strong> <span class="email-var">{{strategist.name}}</span> @ Testimonial Hero</div>
+              <div class="email-field"><strong>To:</strong> <span class="email-var">{{contact.first_name}}</span></div>
+              <div class="email-field"><strong>Subject:</strong> Getting customers on camera (what actually works)</div>
+            </div>
+            <div class="email-body">
+              <p>Hi <span class="email-var">{{contact.first_name}}</span>,</p>
+              <p>Getting a customer to agree to a video testimonial is usually the hardest part — not the shoot, not the edit. The ask is where most teams stall.</p>
+              <p>What moves it: make the ask dead simple. A one-line message like "Would you be up for a 5-minute call about your experience with us?" converts better than a formal request with a lot of context.</p>
+              <p>We put together a short outreach guide for teams in <span class="email-var">{{account.name}}</span>'s space — it's what we send clients when things get stuck. Happy to drop it in your inbox.</p>
+              <p>Want me to send it over?</p>
+              <p><span class="email-var">{{strategist.name}}</span></p>
+              <p style="color:var(--text-3);font-size:13px;">P.S. You still have <span class="email-var">{{account.testimonial_credits}}</span> testimonial credits available. Remote shoots can be scheduled within a week once your customer says yes.</p>
+            </div>
+          </div>
+
+          <div class="design-note">Sent from the Strategist's name, not a generic sender. The guide offer gives the contact a reason to reply without committing to anything. The P.S. surfaces credit availability without making it a threat. Single CTA: reply yes to get the guide.</div>
+
+          <hr class="divider" />
+
+          <h2>Message 2 — In-App / Portal Banner</h2>
+
+          <div style="display:flex;gap:24px;margin-bottom:16px;flex-wrap:wrap;">
+            <div><span style="font-size:11px;color:var(--text-3);text-transform:uppercase;font-weight:600;">Trigger</span><br><span style="font-size:13px;color:var(--text-2);">Portal login + <span class="flag">single_service</span></span></div>
+            <div><span style="font-size:11px;color:var(--text-3);text-transform:uppercase;font-weight:600;">Segment</span><br><span style="font-size:13px;color:var(--text-2);">Healthy or Drifting + single_service</span></div>
+            <div><span style="font-size:11px;color:var(--text-3);text-transform:uppercase;font-weight:600;">Dismiss</span><br><span style="font-size:13px;color:var(--text-2);">After 1 view; don't repeat for 14 days</span></div>
+          </div>
+
+          <p><strong>Dynamic variables:</strong>
+            <span class="email-var">{{account.credits_remaining}}</span>
+            <span class="email-var">{{account.deliverable_type_used}}</span>
+            <span class="email-var">{{account.brand_not_used}}</span>
+          </p>
+
+          <div class="inapp-preview">
+            <span class="close">✕</span>
+            <p>Your <span class="email-var">{{account.credits_remaining}}</span> credits work across everything we make — not just <span class="email-var">{{account.deliverable_type_used}}</span>.</p>
+            <p>Teams like yours are using <span class="email-var">{{account.brand_not_used}}</span> to make their product look as good as it performs. Same credits, different story.</p>
+            <span class="cta">See what's possible →</span>
+          </div>
+
+          <div class="design-note">"Same credits, different story" removes the main cross-sell objection in B2B procurement: "do I need to buy something new?" The CTA links to the specific brand page for <code>{{account.brand_not_used}}</code> so it's contextual, not generic. Under 40 words — completable in one glance.</div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Section 05: Analytics ── -->
+  <div class="section" id="analytics">
+    <div class="section-header">
+      <div class="section-number">05</div>
+      <div>
+        <div class="section-title">Analytics & Rationale</div>
+        <div class="section-desc">What to measure, what's broken before day one, and what to build first.</div>
+      </div>
+    </div>
+
+    <div class="tabs" id="tabs-05">
+      <button class="tab active" onclick="switchTab('05','skill')">Skill Prompt</button>
+      <button class="tab" onclick="switchTab('05','output')">Output</button>
+    </div>
+
+    <div class="tab-content active" id="05-skill">
+      <div class="skill-card">
+        <div class="skill-card-header">
+          <span class="filename">skills/05-analytics.md</span>
+          <span class="badge">Prompt</span>
+        </div>
+        <pre>## Role
+You are writing the rationale page for a lifecycle system built
+for StorySnap. This page must demonstrate that you think like a
+builder, not a planner: you know what to measure, what's broken
+before you start, and what to ship first.
+
+## Known data and tracking gaps
+- Airtable and HubSpot are not natively synced
+- Portal login data may not be in HubSpot
+- Champion departure exists as alert, not a CRM field
+- Pace Score does not exist as a computed field anywhere
+- Cross-brand credit usage not rolled up at account level
+
+## Your task
+1. 2–3 north star metrics — specific, measurable, leading not lagging
+2. Data and tracking gaps — 3–5 gaps and how to close each
+3. Week-one build — the single critical path item and why first
+4. Conscious scope cuts — what you chose not to build and why
+
+## Quality criteria
+- Metrics must be specific ("utilization rate at month 6",
+  not "engagement")
+- Data gaps must be honest — don't pretend day one works
+- Week-one build must be the actual critical path item
+- Scope cuts must have reasoning, not "ran out of time"</pre>
+      </div>
+    </div>
+
+    <div class="tab-content" id="05-output">
+      <div class="output-card">
+        <div class="output-body">
+
+          <h2>1. North Star Metrics</h2>
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-number">55%+</div>
+              <div class="metric-name">Credit Utilization at Month 6</div>
+              <div class="metric-desc">% of credits used by the halfway point, per cohort. Best clients repurchase at month 6–7 — this is the leading indicator, not GRR or NRR. Target: move from ~40% baseline to 55%+ by Q4 year one.</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-number">40%+</div>
+              <div class="metric-name">Drifting → Healthy Recovery Rate (Automated)</div>
+              <div class="metric-desc">% of Drifting accounts that return to Healthy within 60 days without Strategist intervention. Holds the automated journey accountable. Below 30%: investigate sequence. Above 50%: the machine is working.</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-number">80%+</div>
+              <div class="metric-name">Strategist Alert-to-Action Rate</div>
+              <div class="metric-desc">% of URGENT alerts that result in a logged HubSpot activity within 48h. Holds the alert design accountable — if Strategists aren't acting, the alerts are too frequent, too vague, or misprioritized.</div>
+            </div>
+          </div>
+
+          <h2>2. Data & Tracking Gaps</h2>
+
+          <div class="gap-item" data-n="1">
+            <div class="gap-title">Airtable ↔ HubSpot are not synced</div>
+            <div class="gap-desc">Pace data lives in Airtable. Engagement and contact data live in HubSpot. No HubSpot workflow can enroll accounts based on pace today.</div>
+            <div class="gap-action">→ Map fields in week one. Start with Zapier as first layer. Scope native sync with product ops in parallel.</div>
+          </div>
+
+          <div class="gap-item" data-n="2">
+            <div class="gap-title">Pace Score doesn't exist as a field anywhere</div>
+            <div class="gap-desc">The formula is computable from Airtable, but it's not a stored, queryable value. Without it, no segment enrollment can be automated.</div>
+            <div class="gap-action">→ Create formula field in Airtable first. Sync computed value to HubSpot account property every 24h via Zapier. This is the week-one build.</div>
+          </div>
+
+          <div class="gap-item" data-n="3">
+            <div class="gap-title">Portal login data is not in HubSpot</div>
+            <div class="gap-desc">The <span class="flag">dark</span> flag requires portal engagement data. If login events aren't flowing into HubSpot, this flag can't be computed.</div>
+            <div class="gap-action">→ Confirm with product ops whether logins are tracked anywhere structured. If yes, pipe to HubSpot as last_portal_login. If not, add server-side event.</div>
+          </div>
+
+          <div class="gap-item" data-n="4">
+            <div class="gap-title">Champion departure is an alert, not a CRM field</div>
+            <div class="gap-desc">If it arrives as an email notification rather than a HubSpot field update, it can't trigger automated workflows.</div>
+            <div class="gap-action">→ If email-only: create a manual Strategist process to update a HubSpot contact property (departed = true, departure_date). Build the workflow on top of that field. Works immediately, no dev work.</div>
+          </div>
+
+          <div class="gap-item" data-n="5">
+            <div class="gap-title">Cross-brand credit usage not rolled up at account level</div>
+            <div class="gap-desc">To detect <span class="flag">single_service</span>, I need a count of distinct deliverable types per account. Airtable likely has this per-record, not rolled up.</div>
+            <div class="gap-action">→ Create a rollup field in Airtable counting distinct deliverable_type values per account. Sync count to HubSpot. Enables single_service detection and cross-sell targeting.</div>
+          </div>
+
+          <h2>3. Week-One Build: Pace Score Sync</h2>
+          <div class="week1-card">
+            <div class="label">Week one · Critical path</div>
+            <h3>Build Pace Score as a HubSpot account property</h3>
+            <p>Everything — segments, journey enrollment, alerts, flags, two of three north star metrics — is built on top of pace. Nothing in the system can run without it.</p>
+            <p><strong style="color:#e2e8f0;">What it unlocks immediately:</strong> the moment Pace Score exists as a HubSpot property, every segment enrollment criterion is implementable as a workflow filter. The Drifting journey can enroll accounts. The At Risk alert can fire. The priority matrix becomes operational.</p>
+            <p><strong style="color:#e2e8f0;">How to build it in week one:</strong> create the formula field in Airtable, validate it against 5–10 known accounts manually, then set up a Zapier push to a HubSpot account property every 24 hours. Imperfect — but working and auditable on day seven.</p>
+          </div>
+
+          <h2>4. Conscious Scope Cuts</h2>
+
+          <div class="scope-cut">
+            <div class="icon">✂</div>
+            <div>
+              <div class="scope-cut-title">New account onboarding journey — step-by-step content</div>
+              <div class="scope-cut-desc">The onboarding journey is defined at the segment level but the content (what to say in week 1, how to introduce the portal, how to brief clients on all brands) deserves its own exercise. The core problem the brief identifies is underutilization mid-term, not early abandonment. Fixing drift and at-risk accounts recovers more revenue faster than optimizing the first 30 days.</div>
+            </div>
+          </div>
+
+          <div class="scope-cut">
+            <div class="icon">✂</div>
+            <div>
+              <div class="scope-cut-title">Accelerating account cross-sell journey</div>
+              <div class="scope-cut-desc">Accounts with Pace Score &gt; 1.2 are a good problem. They're self-correcting. I defined the segment and noted the cross-sell opportunity, but didn't design the journey in detail because the ROI is lower than fixing accounts at risk of not repurchasing at all. When the core system is running, Accelerating accounts are the right next investment.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+  function switchTab(sectionId, tab) {
+    const skillTab = document.getElementById(sectionId + '-skill');
+    const outputTab = document.getElementById(sectionId + '-output');
+    const tabs = document.getElementById('tabs-' + sectionId);
+    const buttons = tabs.querySelectorAll('.tab');
+
+    if (tab === 'skill') {
+      skillTab.classList.add('active');
+      outputTab.classList.remove('active');
+      buttons[0].classList.add('active');
+      buttons[1].classList.remove('active');
+    } else {
+      outputTab.classList.add('active');
+      skillTab.classList.remove('active');
+      buttons[1].classList.add('active');
+      buttons[0].classList.remove('active');
+    }
+  }
+
+  // Highlight active nav on scroll
+  const sections = ['hero','seg','journey','strategist','copy','analytics'];
+  const links = document.querySelectorAll('.nav-link');
+
+  window.addEventListener('scroll', () => {
+    let current = 'hero';
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && window.scrollY >= el.offsetTop - 100) current = id;
+    });
+    links.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
