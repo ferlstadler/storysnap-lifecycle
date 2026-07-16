@@ -1187,6 +1187,51 @@
       width: 100%;
     }
 
+    /* ── Explainer box ── */
+    .explainer-box {
+      display: flex;
+      gap: 14px;
+      background: #fafaf7;
+      border: 1px solid #e5e4d8;
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin: 16px 0;
+    }
+
+    .explainer-icon {
+      width: 28px;
+      height: 28px;
+      background: #fef9c3;
+      border: 1px solid #fde68a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #b45309;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .explainer-content { flex: 1; }
+
+    .explainer-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .explainer-content p {
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.65;
+      margin-bottom: 8px;
+    }
+
+    .explainer-content p:last-child { margin-bottom: 0; }
+    .explainer-content em { font-style: italic; color: var(--text); }
+    .explainer-content strong { color: var(--text); }
+
     /* ── About section ── */
     .about-section {
       background: white;
@@ -1998,6 +2043,18 @@
 
           <h2>2. Fully Designed Alert: Lost Champion</h2>
           <p><strong>Why this one:</strong> It's where timing and context matter most. An Expiration Watch alert is urgent but the action is clear. Lost Champion requires the Strategist to make judgment calls — is the replacement the right person? Is the account worth prioritizing? The alert must answer those questions in 60 seconds.</p>
+
+          <div class="explainer-box">
+            <div class="explainer-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div class="explainer-content">
+              <div class="explainer-title">What is a HubSpot Task?</div>
+              <p>A Task is a to-do item created automatically in the Strategist's HubSpot queue — it shows up in their daily work list with a due date, priority level, and full body text. Think of it as someone tapping them on the shoulder and saying <em>"look at this now, here's everything you need."</em></p>
+              <p>When the system detects a champion departure, a HubSpot workflow fires and creates a Task assigned to the account's Strategist — due today, marked urgent. The Strategist opens their day, sees it at the top of the queue, reads the full account snapshot in 60 seconds, and knows exactly what to do. No Airtable open, no research, no context-switching.</p>
+              <p>This is what makes the alert a <strong>product</strong>, not a notification. The value isn't that it fires — it's that the Strategist can act on it immediately.</p>
+            </div>
+          </div>
 
           <div class="alert-preview">
             <div class="alert-preview-header">HubSpot Task — URGENT</div>
